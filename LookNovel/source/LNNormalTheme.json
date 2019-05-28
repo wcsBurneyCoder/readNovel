@@ -1,0 +1,11 @@
+{
+    "appMainColor": "66A1F4",
+    "tabBarTitleNormalColor": "B3B3B3",
+    "tabBarTitleSelectColor": "66A1F4",
+    "tabBarOneNormalImage": "icon_tabbar_bookshelf_24x24_",
+    "tabBarOneSelectImage": "icon_tabbar_bookshelf_sel_24x24_",
+    "tabBarTwoNormalImage": "icon_tabbar_classify_24x24_",
+    "tabBarTwoSelectImage": "icon_tabbar_classify_sel_24x24_",
+    "tabBarThreeNormalImage": "icon_tabbar_mine_24x24_",
+    "tabBarThreeSelectImage": "icon_tabbar_mine_sel_24x24_",
+}

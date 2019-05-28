@@ -1,0 +1,47 @@
+//
+//  lookNovel.pch
+//  LookNovel
+//
+//  Created by wangchengshan on 2019/5/8.
+//  Copyright © 2019 wcs Co.,ltd. All rights reserved.
+//
+
+#ifndef lookNovel_pch
+#define lookNovel_pch
+
+#import <UIKit/UIKit.h>
+#import "YYKit.h"
+#import "LNConst.h"
+#import <MJExtension/MJExtension.h>
+#import <Masonry/Masonry.h>
+#import "UIView+NIB.h"
+#import "UIViewController+NIB.h"
+#import "MBProgressHUD+LNHUD.h"
+#import "LNSkinHelper.h"
+#import "LNRequest.h"
+#import "LNCommonHelper.h"
+
+//日志
+#ifdef DEBUG
+# define LNLog(format,...); NSLog((@"方法名:%s , 行号:%d 行," format), __FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+# define LNLog(format,...);
+#endif
+
+#define kIphone4 (kScreenWidth == 320.0&&kScreenHeight==480.0)?YES:NO
+#define kIphone5 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136), [[UIScreen mainScreen] currentMode].size) : NO)
+#define kIphone6 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(750, 1334), [[UIScreen mainScreen] currentMode].size) : NO)
+#define kIphone6p ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1242, 2208), [[UIScreen mainScreen] currentMode].size) : NO)
+#define kIphoneX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) : NO)
+#define KIphoneXMAX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1242, 2688), [[UIScreen mainScreen] currentMode].size) : NO)
+#define KIphoneXR ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? (CGSizeEqualToSize(CGSizeMake(750, 1624), [[UIScreen mainScreen] currentMode].size)||CGSizeEqualToSize(CGSizeMake(828, 1792), [[UIScreen mainScreen] currentMode].size)) : NO)
+
+#define JFAPPMainColor [JFSkinManager appMainColor]
+
+#define kNaviHeight self.navigationController.navigationBar.height + CGRectGetHeight([UIApplication sharedApplication].statusBarFrame)
+
+#define KIphoneFullScreen (kIphoneX||KIphoneXMAX||KIphoneXR)
+#define kIPhoneX_BOTTOM_HEIGHT  (KIphoneFullScreen?34:0)
+#define kIPhoneX_TOP_HEIGHT  (KIphoneFullScreen?24:0)
+
+#endif /* lookNovel_pch */

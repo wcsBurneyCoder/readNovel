@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Tab Bar Controller-->
+        <scene sceneID="MfX-Ee-zLo">
+            <objects>
+                <tabBarController id="aX4-OJ-chZ" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="PnD-Ep-md0">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="c3K-ob-HqR" kind="relationship" relationship="viewControllers" id="R57-mJ-iJR"/>
+                        <segue destination="ICL-NL-eFL" kind="relationship" relationship="viewControllers" id="dJi-AU-NR4"/>
+                        <segue destination="WYd-W0-KaS" kind="relationship" relationship="viewControllers" id="VXw-YH-vLv"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JyP-We-f2l" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-577" y="-131"/>
+        </scene>
+        <!--我的-->
+        <scene sceneID="BnD-9z-LFs">
+            <objects>
+                <navigationController id="WYd-W0-KaS" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="我的" image="icon_tabbar_mine_24x24_" selectedImage="icon_tabbar_mine_sel_24x24_" id="0aZ-4M-hWT"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Y5J-Pc-kba">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="atg-8w-qBe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="138" y="656"/>
+        </scene>
+        <!--bookrack-->
+        <scene sceneID="RTl-BK-2fq">
+            <objects>
+                <viewControllerPlaceholder storyboardName="bookrack" id="c3K-ob-HqR" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="dAM-nu-Bvq"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="d7B-s1-ubW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="251" y="-240"/>
+        </scene>
+        <!--classify-->
+        <scene sceneID="f8v-oa-RqB">
+            <objects>
+                <viewControllerPlaceholder storyboardName="classify" id="ICL-NL-eFL" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="HpM-Ua-fhl"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0Ue-yC-LgB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="352" y="220"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="icon_tabbar_mine_24x24_" width="24" height="24"/>
+        <image name="icon_tabbar_mine_sel_24x24_" width="24" height="24"/>
+    </resources>
+</document>

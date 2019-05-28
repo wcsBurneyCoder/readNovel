@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="LNReaderTopControlView">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="64"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bM6-6U-Sih">
+                    <rect key="frame" x="0.0" y="20" width="414" height="44"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9JU-yc-eIE">
+                            <rect key="frame" x="5" y="0.0" width="40" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="40" id="O7k-ah-9OM"/>
+                            </constraints>
+                            <state key="normal" image="icon_return_8x14_"/>
+                            <connections>
+                                <action selector="clickBackBtn" destination="iN0-l3-epB" eventType="touchUpInside" id="FsX-76-DMm"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QaD-EE-rWB">
+                            <rect key="frame" x="370" y="10" width="24" height="24"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="24" id="ATl-hD-9vP"/>
+                                <constraint firstAttribute="width" constant="24" id="hYz-dh-XHC"/>
+                            </constraints>
+                            <state key="normal" image="icon_change_34x34_"/>
+                            <connections>
+                                <action selector="clickChangeSource" destination="iN0-l3-epB" eventType="touchUpInside" id="m7w-gP-FqC"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U0l-AW-yIT">
+                            <rect key="frame" x="331" y="10" width="24" height="24"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="24" id="WON-tR-D9Y"/>
+                                <constraint firstAttribute="height" constant="24" id="f3P-uN-Wm6"/>
+                            </constraints>
+                            <state key="normal" image="icon_contents_34x34_"/>
+                            <connections>
+                                <action selector="clickContents" destination="iN0-l3-epB" eventType="touchUpInside" id="zmC-Gc-ULG"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9em-t9-409">
+                            <rect key="frame" x="185.5" y="12" width="43" height="20.5"/>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                            <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="U0l-AW-yIT" firstAttribute="centerY" secondItem="bM6-6U-Sih" secondAttribute="centerY" id="6zg-Ne-76c"/>
+                        <constraint firstAttribute="trailing" secondItem="QaD-EE-rWB" secondAttribute="trailing" constant="20" id="83H-uM-lRb"/>
+                        <constraint firstItem="9em-t9-409" firstAttribute="centerY" secondItem="bM6-6U-Sih" secondAttribute="centerY" id="A17-cw-7Va"/>
+                        <constraint firstAttribute="bottom" secondItem="9JU-yc-eIE" secondAttribute="bottom" id="RoP-48-0k9"/>
+                        <constraint firstItem="QaD-EE-rWB" firstAttribute="leading" secondItem="U0l-AW-yIT" secondAttribute="trailing" constant="15" id="TZR-KP-E0S"/>
+                        <constraint firstItem="9JU-yc-eIE" firstAttribute="centerY" secondItem="bM6-6U-Sih" secondAttribute="centerY" id="TfY-hs-hUt"/>
+                        <constraint firstItem="U0l-AW-yIT" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="9em-t9-409" secondAttribute="trailing" constant="10" id="Waz-ul-lCZ"/>
+                        <constraint firstItem="9em-t9-409" firstAttribute="centerX" secondItem="bM6-6U-Sih" secondAttribute="centerX" id="iGW-R4-emw"/>
+                        <constraint firstItem="QaD-EE-rWB" firstAttribute="centerY" secondItem="bM6-6U-Sih" secondAttribute="centerY" id="lWx-zu-jb4"/>
+                        <constraint firstAttribute="height" constant="44" id="mNq-hS-28R"/>
+                        <constraint firstItem="9JU-yc-eIE" firstAttribute="top" secondItem="bM6-6U-Sih" secondAttribute="top" id="pEB-ov-bH0"/>
+                        <constraint firstItem="9JU-yc-eIE" firstAttribute="leading" secondItem="bM6-6U-Sih" secondAttribute="leading" constant="5" id="sdw-eU-VaN"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="bM6-6U-Sih" secondAttribute="trailing" id="UJF-KG-5bP"/>
+                <constraint firstAttribute="bottom" secondItem="bM6-6U-Sih" secondAttribute="bottom" id="x92-Z2-FgG"/>
+                <constraint firstItem="bM6-6U-Sih" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="zO8-0M-JBq"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="titleLabel" destination="9em-t9-409" id="AGf-XY-jJH"/>
+            </connections>
+            <point key="canvasLocation" x="11" y="76"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="icon_change_34x34_" width="34" height="34"/>
+        <image name="icon_contents_34x34_" width="34" height="34"/>
+        <image name="icon_return_8x14_" width="8" height="14"/>
+    </resources>
+</document>
