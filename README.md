@@ -1,7 +1,11 @@
-# readNovel
-一款小说阅读器的完整应用
+小说阅读器 - 看小说
+==================
+
+![Pod Version](http://img.shields.io/cocoapods/v/DZNEmptyDataSet.svg)
+![License](http://img.shields.io/badge/license-MIT-blue.svg)
+
 ### screenShot
-![list](https://github.com/wcsBurneyCoder/readNovel/screenShot/list.png)
+![Screenshots](https://github.com/wcsBurneyCoder/readNovel/raw/master/screenShot/screenShot.png)
 
 ### 功能介绍
     业余时间写的一个小说阅读APP，基本包含了小说阅读的基本功能。
