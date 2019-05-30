@@ -54,7 +54,7 @@
     self.textLabel.text = chapter.isCurrent?[chapter.title stringByAppendingString:@"(当前)"]:chapter.title;
     self.textLabel.font = [UIFont systemFontOfSize:15];
     self.lockView.hidden = !chapter.isVip;
-//    self.textLabel.textColor = chapter.isVip?UIColorHex(@"FF4500"):UIColorHex(@"333333");
+    self.textLabel.textColor = UIColorHex([LNSkinHelper sharedHelper].currentReaderSkin.chapterColor)?:UIColorHex(@"666666");
 }
 
 @end

@@ -33,6 +33,8 @@
 @property (nonatomic, copy) NSString *sliderThumb;
 @property (nonatomic, copy) NSString *settingBtnColor;
 @property (nonatomic, copy) NSString *bgImage;
+@property (nonatomic, copy) NSString *chapterColor;
+@property (nonatomic, copy) NSString *sourceColor;
 @end
 
 @interface LNSkinHelper : NSObject

@@ -31,19 +31,22 @@
 - (void)setSource:(LNBookLinkSource *)source
 {
     _source = source;
+    UIColor *sourceColor = UIColorHex([LNSkinHelper sharedHelper].currentReaderSkin.sourceColor)?:UIColorHex(@"666666");
+    UIColor *chapterColor = UIColorHex([LNSkinHelper sharedHelper].currentReaderSkin.chapterColor)?:UIColorHex(@"666666");
+    UIColor *currentColor = UIColorHex([LNSkinHelper sharedHelper].currentReaderSkin.chapterColor)?:UIColorHex(@"666666");
     
-    NSMutableAttributedString *attribute = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ (共%ld章节)",source.name,source.chaptersCount] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15],NSForegroundColorAttributeName:UIColorHex(@"333333")}];
+    NSMutableAttributedString *attribute = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ (共%ld章节)",source.name,source.chaptersCount] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15],NSForegroundColorAttributeName:sourceColor}];
     NSRange range = [attribute.string rangeOfString:source.name];
-    [attribute setColor:UIColorHex(@"999999") range:NSMakeRange(range.length, attribute.string.length - range.length)];
+    [attribute setColor:sourceColor range:NSMakeRange(range.length, attribute.string.length - range.length)];
     
     if (source.isCurrent) {
-        NSAttributedString *current = [[NSAttributedString alloc] initWithString:@"(当前)" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15],NSForegroundColorAttributeName:UIColorHex(@"999999")}];
+        NSAttributedString *current = [[NSAttributedString alloc] initWithString:@"(当前)" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15],NSForegroundColorAttributeName:currentColor}];
         [attribute appendAttributedString:current];
     }
     self.textLabel.attributedText = attribute;
     
     self.detailTextLabel.text = source.lastChapter;
-    self.detailTextLabel.textColor = UIColorHex(@"666666");
+    self.detailTextLabel.textColor = chapterColor;
 }
 
 @end

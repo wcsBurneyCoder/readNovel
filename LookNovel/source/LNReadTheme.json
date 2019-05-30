@@ -9,6 +9,8 @@
         "settingTextColor":"26272B",
         "sliderThumb":"icon_adjust_button_night_32x32_",
         "settingBtnColor":"272B34",
+        "chapterColor":"666666",
+        "sourceColor":"525252",
         "bgImage":""
     },
     {
@@ -21,6 +23,8 @@
         "settingTextColor":"666666",
         "sliderThumb":"icon_adjust_button_30x30_",
         "settingBtnColor":"DAD9DF",
+        "chapterColor":"999999",
+        "sourceColor":"333333",
         "bgImage":"pic_theme_Kraft_375x667_"
         
     },
@@ -34,6 +38,8 @@
         "settingTextColor":"666666",
         "sliderThumb":"icon_adjust_button_30x30_",
         "settingBtnColor":"DAD9DF",
+        "chapterColor":"999999",
+        "sourceColor":"333333",
         "bgImage":""
     },
     {
@@ -46,6 +52,8 @@
         "settingTextColor":"666666",
         "sliderThumb":"icon_adjust_button_30x30_",
         "settingBtnColor":"DAD9DF",
+        "chapterColor":"999999",
+        "sourceColor":"333333",
         "bgImage":""
     },
     {
@@ -58,6 +66,8 @@
         "settingTextColor":"666666",
         "sliderThumb":"icon_adjust_button_30x30_",
         "settingBtnColor":"DAD9DF",
+        "chapterColor":"999999",
+        "sourceColor":"333333",
         "bgImage":""
     },
     {
@@ -70,6 +80,8 @@
         "settingTextColor":"666666",
         "sliderThumb":"icon_adjust_button_30x30_",
         "settingBtnColor":"DAD9DF",
+        "chapterColor":"999999",
+        "sourceColor":"333333",
         "bgImage":""
     },
     {
@@ -82,6 +94,8 @@
         "settingTextColor":"26272B",
         "sliderThumb":"icon_adjust_button_night_32x32_",
         "settingBtnColor":"272B34",
+        "chapterColor":"666666",
+        "sourceColor":"525252",
         "bgImage":"pic_theme_black_375x667_"
     },
     {
@@ -94,6 +108,8 @@
         "settingTextColor":"666666",
         "sliderThumb":"icon_adjust_button_30x30_",
         "settingBtnColor":"DAD9DF",
+        "chapterColor":"999999",
+        "sourceColor":"333333",
         "bgImage":"pic_theme_green_375x667_"
     },
     {
@@ -106,6 +122,8 @@
         "settingTextColor":"666666",
         "sliderThumb":"icon_adjust_button_30x30_",
         "settingBtnColor":"DAD9DF",
+        "chapterColor":"999999",
+        "sourceColor":"333333",
         "bgImage":"pic_theme_pink_375x667_"
     }
     
