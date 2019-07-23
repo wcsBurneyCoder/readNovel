@@ -39,7 +39,6 @@
     CGFloat width = MIN(self.contentView.width * 0.5, [self.rightLabel.text widthForFont:self.rightLabel.font]);
     
     self.rightLabel.frame = CGRectMake(self.contentView.width - 25 - width, 0, width, self.contentView.height);
-    
 }
 
 - (void)setModel:(LNStaticModel *)model

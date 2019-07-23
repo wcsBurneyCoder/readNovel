@@ -101,14 +101,14 @@
 //下拉刷新
 - (void)loadData
 {
-    [self loadDataWithPageIndex:1 pageSize:[self pageSize] complete:^(id  _Nullable result, BOOL cache, NSError * _Nullable error){
+    [self loadDataWithPageIndex:0 pageSize:[self pageSize] complete:^(id  _Nullable result, BOOL cache, NSError * _Nullable error){
         [self refreshComplete:result error:error isHeader:YES];
     }];
 }
 //上提刷新
 - (void)loadMoreData
 {
-    NSInteger pageIndex = [self.dataArray count] / [self pageSize] + 1;
+    NSInteger pageIndex = [self.dataArray count];
     
     [self loadDataWithPageIndex:pageIndex pageSize:[self pageSize] complete:^(id  _Nullable result, BOOL cache, NSError * _Nullable error) {
         [self refreshComplete:result error:error isHeader:NO];

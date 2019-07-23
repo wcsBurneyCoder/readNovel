@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setDataComplete;
 
-- (float)pageSize;
+- (NSInteger)pageSize;
 
 #pragma mark -
 //下拉刷新

@@ -82,9 +82,9 @@
     return YES;
 }
 
-- (float)pageSize
+- (NSInteger)pageSize
 {
-    return 10.0;
+    return 10;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -102,14 +102,14 @@
 //下拉刷新
 - (void)loadData
 {
-    [self loadDataWithPageIndex:1 pageSize:[self pageSize] complete:^(id result, BOOL cache, NSError *error) {
+    [self loadDataWithPageIndex:0 pageSize:[self pageSize] complete:^(id result, BOOL cache, NSError *error) {
         [self refreshComplete:result error:error isHeader:YES];
     }];
 }
 //上提刷新
 - (void)loadMoreData
 {
-    NSInteger pageIndex = ceil([self.dataArray count] / [self pageSize]) + 1;
+    NSInteger pageIndex = self.dataArray.count;
     
     [self loadDataWithPageIndex:pageIndex pageSize:[self pageSize] complete:^(id result, BOOL cache, NSError *error) {
         [self refreshComplete:result error:error isHeader:NO];
