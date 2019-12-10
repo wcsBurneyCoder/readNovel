@@ -70,7 +70,7 @@
     self.navigationItem.titleView = searchBar;
     
     //拿到searchBar的输入框
-    UITextField *searchTextField = [searchBar valueForKey:@"_searchField"];
+    UITextField *searchTextField = [searchBar valueForKeyPath:@"searchField"];
     //字体大小
     searchTextField.font = [UIFont systemFontOfSize:15];
     searchTextField.textColor = UIColorHex(@"333333");
