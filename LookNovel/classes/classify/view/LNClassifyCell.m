@@ -34,11 +34,10 @@
 {
     _model = model;
     
-    self.nameLabel.text = model.name;
-    self.bookNumLabel.text = [NSString stringWithFormat:@"%ld本",model.bookCount];
+    self.nameLabel.text = model.categoryName;
     
-    [self.firstImageView setImageURL:[NSURL URLWithString:model.bookCover.firstObject]];
-    [self.middleImageView setImageURL:[NSURL URLWithString:model.bookCover[1]]];
-    [self.lastImageView setImageURL:[NSURL URLWithString:model.bookCover.lastObject]];
+    [self.firstImageView setImageURL:[NSURL URLWithString:model.coverImgs.firstObject]];
+    [self.middleImageView setImageURL:[NSURL URLWithString:model.coverImgs[1]]];
+    [self.lastImageView setImageURL:[NSURL URLWithString:model.coverImgs.lastObject]];
 }
 @end

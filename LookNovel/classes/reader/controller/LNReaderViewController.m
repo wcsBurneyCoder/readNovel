@@ -44,6 +44,12 @@
     return _readerVM;
 }
 
+- (void)setRecentBook:(LNRecentBook *)recentBook
+{
+    _recentBook = recentBook;
+    self.readerVM.recentBook = recentBook;
+}
+
 - (UIControl *)coverView
 {
     if (_coverView) {
@@ -130,7 +136,7 @@
 - (void)getBookData
 {
     [MBProgressHUD showWaitingViewText:nil detailText:nil inView:self.view];
-    [self.readerVM loadBookContentWithBook:self.recentBook complete:^(id result, BOOL cache, NSError *error) {
+    [self.readerVM loadBookContentComplete:^(id result, BOOL cache, NSError *error) {
         [MBProgressHUD dismissHUDInView:self.view];
         if (error) {
             [MBProgressHUD showMessageHUD:error.domain];
@@ -139,16 +145,8 @@
         else{
             self.dataArray = [NSMutableArray arrayWithArray:result];
             [self.tableView reloadData];
-            self.readerVM.topTitleLabel.text = self.readerVM.currentChapter.title;
-            if (self.readerVM.hasVipChapter) {
-                NSString *tip = [NSString stringWithFormat:@"该小说含第%ld章以后为vip章节，请切换源再试",(long)self.readerVM.vipChapterIndex];
-                [MBProgressHUD showCancelButtonMessageHUD:tip];
-            }
         }
     }];
-    if (![self.readerVM isNewBook:self.recentBook]) {
-        [self.readerVM getAllSourceWithBookId:self.recentBook._id complete:nil];
-    }
 }
 
 - (void)setupTopView
@@ -171,14 +169,8 @@
 
 - (void)loadData
 {
-    LNBookContent *first = (LNBookContent *)self.dataArray.firstObject;
-    if (first.chapterOrder == 0) {
-        [self.tableView.mj_header endRefreshing];
-        return;
-    }
-    
     CGSize contentSize = self.tableView.contentSize;
-    [self.readerVM changeChapter:first.chapterOrder - 1 complete:^(NSArray *result, BOOL cache, NSError *error) {
+    [self.readerVM changeChapter:self.readerVM.recentBook.chapterIndex - 1 complete:^(id result, BOOL cache, NSError *error) {
         if (!error) {
             [self.dataArray insertObjects:result atIndex:0];
             [self.tableView reloadData];
@@ -195,12 +187,7 @@
 
 - (void)loadMoreData
 {
-    LNBookContent *last = (LNBookContent *)self.dataArray.lastObject;
-    if (last.chapterOrder == self.readerVM.currentSource.chapterList.count - 1) {
-        [self.tableView.mj_footer endRefreshingWithNoMoreData];
-        return;
-    }
-    [self.readerVM changeChapter:(last.chapterOrder + 1) complete:^(NSArray *result, BOOL cache, NSError *error) {
+    [self.readerVM changeChapter:self.readerVM.recentBook.chapterIndex + 1 complete:^(id result, BOOL cache, NSError *error) {
         if (!error) {
             [self.dataArray addObjectsFromArray:result];
             [self.tableView reloadData];
@@ -209,16 +196,7 @@
             [MBProgressHUD showMessageHUD:error.domain];
         }
         [self.tableView.mj_footer endRefreshing];
-//        if (self.readerVM.hasVipChapter) {
-//            NSString *tip = [NSString stringWithFormat:@"该小说含第%ld章以后为vip章节，请切换源再试",self.readerVM.vipChapterIndex];
-//            [MBProgressHUD showCancelButtonMessageHUD:tip];
-//        }
     }];
-}
-
-- (float)pageSize
-{
-    return self.readerVM.pageSize;
 }
 
 - (void)setupControlView
@@ -292,7 +270,7 @@
     NSIndexPath *path = [self.tableView indexPathForRowAtPoint:CGPointMake(xOffset, yOffset)];
     if (path.row < self.dataArray.count) {
         LNBookContent *content = [self.dataArray objectAtIndex:path.row];
-        self.readerVM.topTitleLabel.text = content.title;
+        self.readerVM.topTitleLabel.text = content.name;
     }
 }
 
@@ -403,29 +381,6 @@
     }
 }
 
-- (void)topControlViewDidClickChangeSource:(LNReaderTopControlView *)topView
-{
-    if (self.view.gestureRecognizers.count) {
-        [self.view removeGestureRecognizer:self.view.gestureRecognizers.firstObject];
-    }
-    
-    if (self.chapterListIsShowing) {
-        self.chapterListIsShowing = NO;
-        self.sourceListIsShowing = YES;
-        [self dismissRightViewFinished:^{
-            [self.dispalyListVc removeFromParentViewController];
-            [self showSourceListView];
-        }];
-    }
-    else{
-        if (self.sourceListIsShowing) {
-            return;
-        }
-        self.sourceListIsShowing = YES;
-        [self showSourceListView];
-    }
-}
-
 - (void)topControlViewDidClickBack:(LNReaderTopControlView *)topView
 {
     [self.navigationController popViewControllerAnimated:YES];
@@ -434,8 +389,7 @@
 - (void)showChapterListView
 {
     LNReaderChapterListViewController *listVc = [[LNReaderChapterListViewController alloc] init];
-    listVc.dataArray = [NSMutableArray arrayWithArray:self.readerVM.currentSource.chapterList];
-    listVc.currentIndex = [self.readerVM.currentSource.chapterList indexOfObject:self.readerVM.currentChapter];
+    listVc.recentBook = self.readerVM.recentBook;
     [self.readerVM.rightContentView addSubview:listVc.view];
     listVc.view.frame = self.readerVM.rightContentView.bounds;
     @weakify(self)
@@ -446,50 +400,6 @@
     [self addChildViewController:listVc];
     self.dispalyListVc = listVc;
     [self showRightView];
-}
-
-- (void)showSourceListView
-{
-    LNReaderScourceListViewController *listVc = [[LNReaderScourceListViewController alloc] init];
-    listVc.dataArray = [NSMutableArray arrayWithArray:self.readerVM.sourceList];
-    listVc.currentIndex = [self.readerVM.sourceList indexOfObject:self.readerVM.currentSource];
-    [self.readerVM.rightContentView addSubview:listVc.view];
-    listVc.view.frame = self.readerVM.rightContentView.bounds;
-    @weakify(self)
-    [listVc setDidSelect:^(LNBookLinkSource * _Nonnull source) {
-        [weak_self changeSource:source];
-        [weak_self dismissRightView];
-    }];
-    [self addChildViewController:listVc];
-    self.dispalyListVc = listVc;
-    [self showRightView];
-}
-
-- (void)changeSource:(LNBookLinkSource *)source
-{
-    [MBProgressHUD showWaitingViewText:nil detailText:nil inView:self.view];
-    [self.readerVM changeSource:source complete:^(id result, BOOL cache, NSError *error) {
-        if (error) {
-            [MBProgressHUD dismissHUDInView:self.view];
-            [MBProgressHUD showMessageHUD:error.domain];
-            if (self.view.gestureRecognizers.count == 0) {
-                [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showMenu)]];
-            }
-        }
-        else{
-            self.dataArray = [NSMutableArray arrayWithArray:result];
-            [self.tableView reloadData];
-            [MBProgressHUD dismissHUDInView:self.view];
-            [self.tableView scrollToRow:0 inSection:0 atScrollPosition:UITableViewScrollPositionTop animated:YES];
-            if (self.view.gestureRecognizers.count) {
-                [self.view removeGestureRecognizer:self.view.gestureRecognizers.firstObject];
-            }
-            if (self.readerVM.hasVipChapter) {
-                NSString *tip = [NSString stringWithFormat:@"该小说含第%ld章以后为vip章节，请切换源再试",self.readerVM.vipChapterIndex];
-                [MBProgressHUD showCancelButtonMessageHUD:tip];
-            }
-        }
-    }];
 }
 
 - (void)changeChapter:(NSInteger)index

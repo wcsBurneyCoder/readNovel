@@ -12,6 +12,6 @@
 
 + (NSString *)getCoverUrl:(NSString *)url
 {
-    return [[url stringByReplacingOccurrencesOfString:@"/agent/" withString:@""] stringByURLDecode];
+    return coverImgUrl(url);
 }
 @end

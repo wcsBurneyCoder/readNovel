@@ -7,13 +7,15 @@
 //
 
 #import "LNTableViewController.h"
+@class LNRecentBook;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface LNReaderChapterListViewController : LNTableViewController
-/**当前的章节的索引*/
-@property (nonatomic, assign) NSInteger currentIndex;
+/**当前的书*/
+@property (nonatomic, strong) LNRecentBook *recentBook;
 @property (nonatomic, copy) void(^didSelect)(NSInteger index);
+
 @end
 
 NS_ASSUME_NONNULL_END

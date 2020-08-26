@@ -77,7 +77,7 @@
         make.left.and.right.equalTo(self.view);
         make.left.and.right.equalTo(scrollView);
         make.top.equalTo(scrollView);
-        make.height.mas_equalTo(210);
+        make.height.mas_equalTo(140);
     }];
     
     LNBookDetailIntroView *introView = [LNBookDetailIntroView viewFromNib];

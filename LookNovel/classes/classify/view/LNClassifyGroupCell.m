@@ -27,7 +27,7 @@
 {
     _groupModel = groupModel;
     
-    self.titleLabel.text = groupModel.name;
+    self.titleLabel.text = groupModel.channelName;
     
     if (groupModel.selected) {
         self.backgroundColor = UIColorHex(@"F9F9FB");

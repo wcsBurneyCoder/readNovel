@@ -103,6 +103,7 @@
     
     //获取最新的书籍
     [self.bookrackVM loadRecentBook];
+
 }
 
 - (void)loadDataWithPageIndex:(NSInteger)pageIndex pageSize:(NSInteger)pageSize complete:(httpCompleteBlock)complete

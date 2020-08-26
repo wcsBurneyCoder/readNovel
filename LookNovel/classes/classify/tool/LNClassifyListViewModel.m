@@ -18,9 +18,9 @@
     return 20;
 }
 
-- (void)getBooksWithGroupName:(NSString *)group itemName:(NSString *)item page:(NSInteger)page complete:(nonnull httpCompleteBlock)completeBlock
+- (void)getBooksWithGroupId:(NSString *)groupId page:(NSInteger)page complete:(nonnull httpCompleteBlock)completeBlock
 {
-    [LNAPI getClassifyBooksWithGroupKey:group major:item pageIndex:page pageSize:self.pageSize complete:^(NSArray *result, BOOL cache, NSError *error) {
+    [LNAPI getClassifyBooksWithGroupKey:groupId pageIndex:page pageSize:self.pageSize complete:^(NSArray *result, BOOL cache, NSError *error) {
         if (!error) {
             NSArray *modelArray = [NSArray modelArrayWithClass:[LNClassifyBookModel class] json:result];
             completeBlock(modelArray, cache, error);

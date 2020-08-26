@@ -45,32 +45,21 @@
     
     self.nameLabel.text = model.title;
     
-    self.retentionLabel.text = [NSString stringWithFormat:@"关注度:%.0f%%",model.retentionRatio];
+    self.retentionLabel.text = model.categoryName;
     
-    self.introLabel.text = model.shortIntro;
+    self.introLabel.text = model.desc;
     
     self.autorLabel.text = model.author;
     
-    if (model.minorCate.length) {
-        self.subClassifyBtn.hidden = NO;
-        CGFloat cateWidth = [model.minorCate widthForFont:self.subClassifyBtn.titleLabel.font] + 12;
-        [self.subClassifyBtn setTitle:model.minorCate forState:UIControlStateNormal];
-        self.subClassifyWidth.constant = cateWidth;
+    if (model.word.length == 0) {
+        self.followBtn.hidden = YES;
     }
-    else{
-        self.subClassifyBtn.hidden = YES;
+    else {
+        self.followBtn.hidden = NO;
+        CGFloat wordWidth = [model.word widthForFont:self.followBtn.titleLabel.font] + 12;
+        self.followWidth.constant = wordWidth;
+        [self.followBtn setTitle:model.word forState:UIControlStateNormal];
     }
-    
-    CGFloat follow = 0;
-    NSString *followStr = [NSString stringWithFormat:@"%ld人气",model.latelyFollower];
-    if (model.latelyFollower > 10000){
-        follow = model.latelyFollower / 10000.0;
-        followStr = [NSString stringWithFormat:@"%.1f万人气",follow];
-    }
-    CGFloat followWidth = [followStr widthForFont:self.followBtn.titleLabel.font] + 12;
-    self.followWidth.constant = followWidth;
-    [self.followBtn setTitle:followStr forState:UIControlStateNormal];
-    
 }
 
 @end

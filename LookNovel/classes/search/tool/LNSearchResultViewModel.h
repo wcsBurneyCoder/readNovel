@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) LNSearchResultViewController *resultVc;
 
-- (void)startSearchWithText:(NSString *)text complete:(httpCompleteBlock)completeBlock;
+- (void)startSearchWithText:(NSString *)text page:(NSInteger)page pageSize:(NSInteger)pageSize complete:(httpCompleteBlock)completeBlock;
 
 - (void)enterBookDetailAtIndex:(NSInteger)index;
 @end

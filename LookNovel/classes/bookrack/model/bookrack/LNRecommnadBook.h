@@ -12,23 +12,12 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface LNRecommnadBook : LNBook
-
-@property (nonatomic, assign) BOOL allowMonthly;
 ///作者
 @property (nonatomic, copy) NSString *author;
-@property (nonatomic, assign) NSInteger banned;
-///最近的粉丝数
-@property (nonatomic, assign) NSInteger latelyFollower;
-///一级分类
-@property (nonatomic, copy) NSString *majorCate;
-///二级分类
-@property (nonatomic, copy) NSString *minorCate;
-///评分
-@property (nonatomic, copy) NSString *retentionRatio;
 ///内容介绍
-@property (nonatomic, copy) NSString *shortIntro;
-///来源站点
-@property (nonatomic, copy) NSString *site;
+@property (nonatomic, copy) NSString *desc;
+///字数
+@property (nonatomic, copy) NSString *word;
 
 @end
 

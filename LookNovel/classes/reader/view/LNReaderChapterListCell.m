@@ -9,7 +9,7 @@
 #import "LNReaderChapterListCell.h"
 
 @interface LNReaderChapterListCell ()
-@property (nonatomic, weak) UIImageView *lockView;
+//@property (nonatomic, weak) UIImageView *lockView;
 @end
 
 @implementation LNReaderChapterListCell
@@ -27,15 +27,15 @@
             make.height.mas_equalTo(0.5);
         }];
         
-        UIImageView *lockView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"forum_lock_9x11_"]];
-        [self.contentView addSubview:lockView];
-        self.lockView = lockView;
-        [lockView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(self.contentView).offset(-15);
-            make.centerY.equalTo(self.contentView);
-            make.width.mas_equalTo(9);
-            make.height.mas_equalTo(11);
-        }];
+//        UIImageView *lockView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"forum_lock_9x11_"]];
+//        [self.contentView addSubview:lockView];
+//        self.lockView = lockView;
+//        [lockView mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.right.equalTo(self.contentView).offset(-15);
+//            make.centerY.equalTo(self.contentView);
+//            make.width.mas_equalTo(9);
+//            make.height.mas_equalTo(11);
+//        }];
     }
     return self;
 }
@@ -51,9 +51,8 @@
 {
     _chapter = chapter;
     
-    self.textLabel.text = chapter.isCurrent?[chapter.title stringByAppendingString:@"(当前)"]:chapter.title;
+    self.textLabel.text = chapter.isCurrent?[chapter.name stringByAppendingString:@"(当前)"]:chapter.name;
     self.textLabel.font = [UIFont systemFontOfSize:15];
-    self.lockView.hidden = !chapter.isVip;
     self.textLabel.textColor = UIColorHex([LNSkinHelper sharedHelper].currentReaderSkin.chapterColor)?:UIColorHex(@"666666");
 }
 

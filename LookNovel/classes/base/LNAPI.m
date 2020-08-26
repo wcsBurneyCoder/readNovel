@@ -12,96 +12,102 @@
 
 + (void)getHomeRecommandListComplete:(httpCompleteBlock)completeBlock
 {
-    NSMutableArray *arrayM = [NSMutableArray array];
-    [LNRequest GET:@"http://api.zhuishushenqi.com/ranking/5a684515fc84c2b8efaa9875" params:nil cache:YES complete:^(id  _Nullable firstResult, BOOL cache, NSError * _Nullable error) {
-        [arrayM removeAllObjects];
+    [LNRequest GET:@"category/discoveryAll?pageNum=1&pageSize=9&type=RECENT_UPDATE" params:nil cache:NO complete:^(id result, BOOL cache, NSError *error) {
         if (error) {
             if (completeBlock) {
-                completeBlock(arrayM, cache, error);
+                completeBlock(nil, cache, error);
             }
         }
         else{
-            NSDictionary *firstDict = [firstResult objectForKey:@"ranking"];
-            NSArray *firstArr = [firstDict objectForKey:@"books"];
-            [arrayM addObjectsFromArray:[firstArr subarrayWithRange:NSMakeRange(0, 5)]];
-            [LNRequest GET:@"http://api.zhuishushenqi.com/ranking/5a6844f8fc84c2b8efaa8bc5" params:nil cache:YES complete:^(id  _Nullable secondResult, BOOL cache, NSError * _Nullable error) {
-                if (error) {
-                    if (completeBlock) {
-                        completeBlock(secondResult, cache, error);
-                    }
-                }
-                else{
-                    NSDictionary *secondDict = [secondResult objectForKey:@"ranking"];
-                    NSArray *secondArr = [secondDict objectForKey:@"books"];
-                    [arrayM addObjectsFromArray:[secondArr subarrayWithRange:NSMakeRange(0, 4)]];
-                    [arrayM shuffle];
-                    if (completeBlock) {
-                        completeBlock(arrayM, cache, nil);
-                    }
-                }
-            }];
+            NSArray *books = [[result objectForKey:@"data"] objectForKey:@"list"];
+            if (completeBlock) {
+                completeBlock(books, cache, error);
+            }
         }
     }];
 }
 
-+ (void)getSourcesWithBookId:(NSString *)bookId complete:(httpCompleteBlock)completeBlock
++ (void)getBookChaptersWithBookId:(NSString *)bookId complete:(httpCompleteBlock)completeBlock
 {
-    NSString *url =[NSString stringWithFormat:@"http://api.zhuishushenqi.com/atoc?view=summary&book=%@",bookId];
-    [LNRequest GET:url params:nil cache:YES complete:^(id result, BOOL cache, NSError *error) {
-        if (completeBlock) {
-            completeBlock(result,cache,error);
+    [LNRequest GET:@"chapter/getByBookId" params:@{@"bookId": bookId} cache:NO complete:^(id result, BOOL cache, NSError *error) {
+        if (error) {
+            if (completeBlock) {
+                completeBlock(nil,cache,error);
+            }
+        }
+        else {
+            NSArray *chapters = result[@"data"][@"chapters"];
+            if (completeBlock) {
+                completeBlock(chapters,cache,error);
+            }
         }
     }];
 }
 
-+ (void)getBookChaptersWithsourceId:(NSString *)sourceId complete:(httpCompleteBlock)completeBlock
++ (void)updateBookChaptersWithBookId:(NSString *)bookId chapterId:(NSString *)chapterId complete:(httpCompleteBlock)completeBlock
 {
-    NSString *url =[NSString stringWithFormat:@"http://api.zhuishushenqi.com/atoc/%@?view=chapters",sourceId];
-    [LNRequest GET:url params:nil cache:YES complete:^(id result, BOOL cache, NSError *error) {
-        if (completeBlock) {
-            completeBlock(result,cache,error);
+    [LNRequest GET:@"chapter/getByBookId" params:@{@"bookId": bookId, @"chapterId": chapterId} cache:NO complete:^(id result, BOOL cache, NSError *error) {
+        if (error) {
+            if (completeBlock) {
+                completeBlock(nil,cache,error);
+            }
+        }
+        else {
+            NSArray *chapters = result[@"data"][@"chapters"];
+            if (completeBlock) {
+                completeBlock(chapters,cache,error);
+            }
         }
     }];
 }
 
-+ (void)getBookContentWithChapter:(NSString *)chapterLink complete:(httpCompleteBlock)completeBlock
++ (void)getBookContentWithChapter:(NSString *)chapterId bookId:(NSString *)bookId complete:(httpCompleteBlock)completeBlock
 {
-    NSString *link = [chapterLink stringByURLEncode];
-    NSString *url =[NSString stringWithFormat:@"http://chapterup.zhuishushenqi.com/chapter/%@",link];
-    [LNRequest GET:url params:nil cache:YES complete:^(id result, BOOL cache, NSError *error) {
-        if (completeBlock) {
-            completeBlock(result,cache,error);
+    [LNRequest POST:@"chapter/get" params:@{@"bookId": bookId, @"chapterIdList": @[chapterId]} cache:NO complete:^(id result, BOOL cache, NSError *error) {
+        if (error) {
+            if (completeBlock) {
+                completeBlock(nil,cache,error);
+            }
+        }
+        else {
+            NSArray *contents = result[@"data"][@"list"];
+            if (completeBlock) {
+                completeBlock(contents.firstObject,cache,error);
+            }
         }
     }];
 }
 
 + (void)getAllClassifyListComplete:(httpCompleteBlock)completeBlock
 {
-    [LNRequest GET:@"http://api.zhuishushenqi.com/cats/lv2/statistics" params:nil cache:YES complete:^(id result, BOOL cache, NSError *error) {
+    [LNRequest GET:@"category/getCategoryChannel" params:nil cache:NO complete:^(id result, BOOL cache, NSError *error) {
+        if (error) {
+            if (completeBlock) {
+                completeBlock(nil,cache,error);
+            }
+        }
         if (completeBlock) {
-            completeBlock(result,cache,error);
+            completeBlock([result objectForKey:@"data"][@"channels"],cache,error);
         }
     }];
 }
 
-+ (void)getClassifyBooksWithGroupKey:(NSString *)key major:(NSString *)major pageIndex:(NSInteger)index pageSize:(NSInteger)pageSize complete:(httpCompleteBlock)completeBlock
++ (void)getClassifyBooksWithGroupKey:(NSString *)key pageIndex:(NSInteger)index pageSize:(NSInteger)pageSize complete:(httpCompleteBlock)completeBlock
 {
     NSDictionary *param = @{
-                            @"gender":key,
-                            @"type":@"hot",
-                            @"major":major,
-                            @"minor":@"",
-                            @"start":@(index),
-                            @"limit":@(pageSize)
+                            @"categoryId":key,
+                            @"orderBy":@"HOT",
+                            @"pageNum":@(index),
+                            @"pageSize":@(pageSize)
                             };
-    [LNRequest GET:@"https://api.zhuishushenqi.com/book/by-categories" params:param cache:YES complete:^(NSDictionary *result, BOOL cache, NSError *error) {
+    [LNRequest GET:@"book/getCategoryId" params:param cache:NO complete:^(NSDictionary *result, BOOL cache, NSError *error) {
         if (error) {
             if (completeBlock) {
                 completeBlock(result,cache,error);
             }
         }
         else{
-            NSArray *books = [result objectForKey:@"books"];
+            NSArray *books = [result objectForKey:@"data"][@"list"];
             if (completeBlock) {
                 completeBlock(books,cache,error);
             }
@@ -111,10 +117,17 @@
 
 + (void)getBookDetailWithId:(NSString *)bookId complete:(httpCompleteBlock)completeBlock
 {
-    NSString *url = [NSString stringWithFormat:@"http://api.zhuishushenqi.com/book/%@",bookId];
-    [LNRequest GET:url params:nil cache:NO complete:^(id result, BOOL cache, NSError *error) {
-        if (completeBlock) {
-            completeBlock(result,cache,error);
+    [LNRequest GET:@"book/getDetail" params:@{@"bookId": bookId} cache:NO complete:^(id result, BOOL cache, NSError *error) {
+        if (error) {
+            if (completeBlock) {
+                completeBlock(result,cache,error);
+            }
+        }
+        else{
+            NSDictionary *book = [result objectForKey:@"data"];
+            if (completeBlock) {
+                completeBlock(book,cache,error);
+            }
         }
     }];
 }
@@ -142,7 +155,7 @@
     }];
 }
 
-+ (void)getSearchBooksWithKeyword:(NSString *)keyword complete:(httpCompleteBlock)completeBlock
++ (void)getSearchBooksWithKeyword:(NSString *)keyword page:(NSInteger)page pageSize:(NSInteger)pageSize complete:(httpCompleteBlock)completeBlock
 {
     if (keyword.length == 0) {
         if (completeBlock) {
@@ -150,14 +163,14 @@
         }
         return;
     }
-    [LNRequest GET:@"http://api.zhuishushenqi.com/book/fuzzy-search" params:@{@"query":keyword} cache:NO complete:^(id result, BOOL cache, NSError *error) {
+    [LNRequest GET:@"book/search" params:@{@"keyWord":keyword, @"pageNum": @(page), @"pageSize": @(pageSize)} cache:NO complete:^(id result, BOOL cache, NSError *error) {
         if (error) {
             if (completeBlock) {
                 completeBlock(result,cache,error);
             }
         }
         else{
-            NSArray *books = [result objectForKey:@"books"];
+            NSArray *books = [[result objectForKey:@"data"] objectForKey:@"list"];
             if (completeBlock) {
                 completeBlock(books,cache,error);
             }

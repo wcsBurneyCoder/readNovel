@@ -9,11 +9,6 @@
 #import "LNBookLinkSource.h"
 
 @implementation LNBookLinkSource
-MJCodingImplementation
 
-- (BOOL)isEqual:(LNBookLinkSource *)object
-{
-    return [self._id isEqualToString:object._id];
-}
 
 @end

@@ -21,11 +21,7 @@
         [self.delegate topControlViewDidClickBack:self];
     }
 }
-- (IBAction)clickChangeSource {
-    if ([self.delegate respondsToSelector:@selector(topControlViewDidClickChangeSource:)]) {
-        [self.delegate topControlViewDidClickChangeSource:self];
-    }
-}
+
 - (IBAction)clickContents {
     if ([self.delegate respondsToSelector:@selector(topControlViewDidClickShowContents:)]) {
         [self.delegate topControlViewDidClickShowContents:self];

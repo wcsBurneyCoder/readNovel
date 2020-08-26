@@ -36,4 +36,21 @@
     return comp.hour;
 }
 
+- (NSString *)timeIntervalDescription
+{
+    NSTimeInterval timeInterval = -[self timeIntervalSinceNow];
+    if (timeInterval < 60) {
+        return @"1分钟内";
+    } else if (timeInterval < 3600) {
+        return [NSString stringWithFormat:@"%.f分钟前", timeInterval / 60];
+    } else if (timeInterval < 86400) {
+        return [NSString stringWithFormat:@"%.f小时前", timeInterval / 3600];
+    } else if (timeInterval < 2592000) {//30天内
+        return [NSString stringWithFormat:@"%.f天前", timeInterval / 86400];
+    } else if (timeInterval < 31536000) {//30天至1年内
+        return [self stringWithFormat:@"M月d日"];
+    } else {
+        return [NSString stringWithFormat:@"%.f年前", timeInterval / 31536000];
+    }
+}
 @end

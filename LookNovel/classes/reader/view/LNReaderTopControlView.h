@@ -15,7 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol LNReaderTopControlViewDelegate <NSObject>
 
 - (void)topControlViewDidClickBack:(LNReaderTopControlView *)topView;
-- (void)topControlViewDidClickChangeSource:(LNReaderTopControlView *)topView;
 - (void)topControlViewDidClickShowContents:(LNReaderTopControlView *)topView;
 
 @end

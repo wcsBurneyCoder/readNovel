@@ -9,5 +9,25 @@
 #import "LNBookChapter.h"
 
 @implementation LNBookChapter
-MJCodingImplementation
+
++ (NSDictionary<NSString *,id> *)modelCustomPropertyMapper
+{
+    return @{@"Id": @"id"};
+}
+
+- (BOOL)isEqual:(LNBookChapter *)other
+{
+    return [self.Id isEqualToString:other.Id];
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    return [self modelInitWithCoder:coder];
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    [self modelEncodeWithCoder:coder];
+}
+
 @end

@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface LNBookContent : NSObject
-@property (nonatomic, copy) NSString *title;
-@property (nonatomic, assign) NSInteger chapterOrder;
-@property (nonatomic, copy) NSString *body;
+@interface LNBookContent : NSObject <YYModel, NSCoding>
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *chapterId;
+@property (nonatomic, copy) NSString *content;
 
 @property (nonatomic, strong) NSAttributedString *titleAttribute;
 @property (nonatomic, strong) NSAttributedString *bodyAttribute;

@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSDate (LNAdd)
 + (NSInteger)numberOfDaysWithFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate;
 + (NSInteger)numberOfHoursWithFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate;
+
+- (NSString *)timeIntervalDescription;
 @end
 
 NS_ASSUME_NONNULL_END

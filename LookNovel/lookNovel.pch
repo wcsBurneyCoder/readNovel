@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import "YYKit.h"
 #import "LNConst.h"
-#import <MJExtension/MJExtension.h>
+//#import <MJExtension/MJExtension.h>
 #import <Masonry/Masonry.h>
 #import "UIView+NIB.h"
 #import "UIViewController+NIB.h"

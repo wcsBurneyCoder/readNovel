@@ -24,7 +24,6 @@
         else{
             LNBookDetail *detail = [LNBookDetail modelWithDictionary:result];
             self.detail = detail;
-            [self handleData];
             [self setupData];
         }
     }];
@@ -36,21 +35,6 @@
     self.introView.detail = self.detail;
     self.scrollView.hidden = NO;
     self.bottomView.hidden = NO;
-}
-
-- (void)handleData
-{
-    NSDate *date = [NSDate dateWithString:self.detail.updated format:@"yyyy-MM-dd'T'HH:mm:ss.SSSX"];
-    NSInteger hours = [NSDate numberOfHoursWithFromDate:date toDate:[NSDate date]];
-    if (hours > 24) {
-        hours = hours / 24;
-        self.detail.updated = [NSString stringWithFormat:@"%ld天前更新",hours];
-    }
-    else
-        self.detail.updated = [NSString stringWithFormat:@"%ld小时前更新",hours];
-    
-    NSAttributedString *attribute = [[NSAttributedString alloc] initWithString:self.detail.longIntro attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14],NSForegroundColorAttributeName:UIColorHex(@"666666")}];
-    self.detail.longIntroAttribute = attribute;
 }
 
 - (void)startReadBook

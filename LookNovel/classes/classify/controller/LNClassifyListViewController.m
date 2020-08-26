@@ -52,7 +52,7 @@
 
 - (void)loadDataWithPageIndex:(NSInteger)pageIndex pageSize:(NSInteger)pageSize complete:(httpCompleteBlock)complete
 {
-    [self.listVM getBooksWithGroupName:self.groupKey itemName:self.itemName page:pageIndex complete:complete];
+    [self.listVM getBooksWithGroupId:self.categoryId page:pageIndex complete:complete];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

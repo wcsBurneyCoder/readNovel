@@ -128,14 +128,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     LNSuggest *suggest = self.tipArray[indexPath.row];
-    if (suggest.type == LNSuggestTypeNormal || suggest.type == LNSuggestTypeAuthor) {
-        [self startSearch:suggest.text];
-    }
-    else if (suggest.type == LNSuggestTypeBook) {
-        LNBookDetailViewController *detailVc = [[LNBookDetailViewController alloc] init];
-        detailVc.bookId = suggest.Id;
-        [self.searchVc.navigationController pushViewController:detailVc animated:YES];
-    }
+//    if (suggest.type == LNSuggestTypeNormal || suggest.type == LNSuggestTypeAuthor) {
+    [self startSearch:suggest.text];
+//    }
+//    else if (suggest.type == LNSuggestTypeBook) {
+//        LNBookDetailViewController *detailVc = [[LNBookDetailViewController alloc] init];
+//        detailVc.bookId = suggest.Id;
+//        [self.searchVc.navigationController pushViewController:detailVc animated:YES];
+//    }
 }
 
 #pragma mark -

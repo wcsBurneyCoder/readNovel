@@ -25,11 +25,6 @@
     return _resultVM;
 }
 
-- (BOOL)hasRefreshFooter
-{
-    return NO;
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -45,7 +40,9 @@
     self.tableView.rowHeight = 120;
     UIEdgeInsets inset = self.tableView.contentInset;
     inset.bottom = kIPhoneX_BOTTOM_HEIGHT;
+    inset.top += 5;
     self.tableView.contentInset = inset;
+    self.tableView.backgroundColor = UIColor.whiteColor;
     self.tableView.mj_footer.ignoredScrollViewContentInsetBottom = inset.bottom;
     [self.tableView.mj_header beginRefreshing];
     
@@ -56,7 +53,7 @@
 
 - (void)loadDataWithPageIndex:(NSInteger)pageIndex pageSize:(NSInteger)pageSize complete:(httpCompleteBlock)complete
 {
-    [self.resultVM startSearchWithText:self.searchText complete:complete];
+    [self.resultVM startSearchWithText:self.searchText page:pageIndex pageSize:pageSize complete:complete];
 }
 
 - (void)setupSearchBarWithText

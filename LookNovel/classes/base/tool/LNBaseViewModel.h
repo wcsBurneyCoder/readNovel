@@ -18,13 +18,15 @@ NS_ASSUME_NONNULL_BEGIN
 ///获取浏览记录
 - (NSArray <LNRecentBook *> *)getRecentBook;
 ///保存最新浏览记录
-- (void)saveLastRecentBook:(LNRecentBook *)recentBook;
+- (void)saveLastRecentBook:(LNRecentBook *)book;
 ///获取最新浏览记录
 - (LNRecentBook *)getLastRecentBook;
 ///获取最新浏览记录
 - (LNRecentBook *)getLastRecentBookFromGroup;
 ///开始阅读
 - (void)startToReadBook:(LNBook *)book;
+
+- (void)deleteRecentBook:(LNRecentBook *)book;
 
 @end
 

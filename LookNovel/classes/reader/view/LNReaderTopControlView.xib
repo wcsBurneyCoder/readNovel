@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -28,19 +26,8 @@
                                 <action selector="clickBackBtn" destination="iN0-l3-epB" eventType="touchUpInside" id="FsX-76-DMm"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QaD-EE-rWB">
-                            <rect key="frame" x="370" y="10" width="24" height="24"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="24" id="ATl-hD-9vP"/>
-                                <constraint firstAttribute="width" constant="24" id="hYz-dh-XHC"/>
-                            </constraints>
-                            <state key="normal" image="icon_change_34x34_"/>
-                            <connections>
-                                <action selector="clickChangeSource" destination="iN0-l3-epB" eventType="touchUpInside" id="m7w-gP-FqC"/>
-                            </connections>
-                        </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U0l-AW-yIT">
-                            <rect key="frame" x="331" y="10" width="24" height="24"/>
+                            <rect key="frame" x="370" y="10" width="24" height="24"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="24" id="WON-tR-D9Y"/>
                                 <constraint firstAttribute="height" constant="24" id="f3P-uN-Wm6"/>
@@ -60,14 +47,12 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="U0l-AW-yIT" firstAttribute="centerY" secondItem="bM6-6U-Sih" secondAttribute="centerY" id="6zg-Ne-76c"/>
-                        <constraint firstAttribute="trailing" secondItem="QaD-EE-rWB" secondAttribute="trailing" constant="20" id="83H-uM-lRb"/>
                         <constraint firstItem="9em-t9-409" firstAttribute="centerY" secondItem="bM6-6U-Sih" secondAttribute="centerY" id="A17-cw-7Va"/>
                         <constraint firstAttribute="bottom" secondItem="9JU-yc-eIE" secondAttribute="bottom" id="RoP-48-0k9"/>
-                        <constraint firstItem="QaD-EE-rWB" firstAttribute="leading" secondItem="U0l-AW-yIT" secondAttribute="trailing" constant="15" id="TZR-KP-E0S"/>
                         <constraint firstItem="9JU-yc-eIE" firstAttribute="centerY" secondItem="bM6-6U-Sih" secondAttribute="centerY" id="TfY-hs-hUt"/>
                         <constraint firstItem="U0l-AW-yIT" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="9em-t9-409" secondAttribute="trailing" constant="10" id="Waz-ul-lCZ"/>
+                        <constraint firstAttribute="trailing" secondItem="U0l-AW-yIT" secondAttribute="trailing" constant="20" id="dbI-bP-B3j"/>
                         <constraint firstItem="9em-t9-409" firstAttribute="centerX" secondItem="bM6-6U-Sih" secondAttribute="centerX" id="iGW-R4-emw"/>
-                        <constraint firstItem="QaD-EE-rWB" firstAttribute="centerY" secondItem="bM6-6U-Sih" secondAttribute="centerY" id="lWx-zu-jb4"/>
                         <constraint firstAttribute="height" constant="44" id="mNq-hS-28R"/>
                         <constraint firstItem="9JU-yc-eIE" firstAttribute="top" secondItem="bM6-6U-Sih" secondAttribute="top" id="pEB-ov-bH0"/>
                         <constraint firstItem="9JU-yc-eIE" firstAttribute="leading" secondItem="bM6-6U-Sih" secondAttribute="leading" constant="5" id="sdw-eU-VaN"/>
@@ -88,7 +73,6 @@
         </view>
     </objects>
     <resources>
-        <image name="icon_change_34x34_" width="34" height="34"/>
         <image name="icon_contents_34x34_" width="34" height="34"/>
         <image name="icon_return_8x14_" width="8" height="14"/>
     </resources>

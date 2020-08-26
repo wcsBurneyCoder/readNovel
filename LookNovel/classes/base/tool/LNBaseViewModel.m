@@ -36,29 +36,26 @@ static YYCache *localStorageCache_;
     return array;
 }
 
-- (void)saveLastRecentBook:(LNRecentBook *)recentBook
+- (void)saveLastRecentBook:(LNRecentBook *)book
 {
+    if (book == nil) {
+        return;
+    }
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         YYCache *cache = [self localStorageCache];
         NSMutableArray *arrayM = [NSMutableArray arrayWithArray:[self getRecentBook]];
-        LNRecentBook *oldBook = nil;
-        for (LNRecentBook *book in arrayM) {
-            if ([book._id isEqualToString:recentBook._id]) {
-                oldBook = book;
-                break;
+        if (book != arrayM.lastObject) {
+            if ([arrayM containsObject:book]) {
+                [arrayM removeObject:book];
+                [arrayM addObject:book];
+            }
+            else {
+                [arrayM addObject:book];
             }
         }
-        if (oldBook) {
-            [arrayM removeObject:oldBook];
-            [arrayM addObject:recentBook];
-        }
-        else{
-            [arrayM addObject:recentBook];
-        }
-        
         [cache setObject:[arrayM copy] forKey:recentBookKey];
         NSData *data = [NSKeyedArchiver archivedDataWithRootObject:arrayM];
-        BOOL res = [data writeToURL:[self pathForGroupLocalStorage] atomically:YES];
+        [data writeToURL:[self pathForGroupLocalStorage] atomically:YES];
     });
 }
 
@@ -74,49 +71,42 @@ static YYCache *localStorageCache_;
     return array.lastObject;
 }
 
+- (void)deleteRecentBook:(LNRecentBook *)book
+{
+    NSMutableArray<LNRecentBook *>*books = [NSMutableArray arrayWithArray:[self getRecentBook]];
+    if ([books containsObject:book]) {
+        [books removeObject:book];
+        YYCache *cache = [self localStorageCache];
+        [cache setObject:[books copy] forKey:recentBookKey];
+        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:books];
+        [data writeToURL:[self pathForGroupLocalStorage] atomically:YES];
+    }
+}
+
 - (void)startToReadBook:(LNBook *)book
 {
-    //记录最近阅读
-    NSArray *books = [self getRecentBook];
-    LNRecentBook *oldBook = nil;
-    for (LNRecentBook *rBook in books) {
-        if ([book._id isEqualToString:rBook._id]) {
-            oldBook = rBook;
-            break;
-        }
+    LNRecentBook *recentBook = nil;
+    if ([book isKindOfClass:[LNRecentBook class]]) {
+        recentBook = (LNRecentBook *)book;
+       
     }
-    if (oldBook) {
-        //已存在
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-            [self saveLastRecentBook:oldBook];
-        });
-        LNReaderViewController *readerVc = [[LNReaderViewController alloc] init];
-        readerVc.recentBook = oldBook;
-        if (self.mainVc.navigationController) {
-            [self.mainVc.navigationController pushViewController:readerVc animated:YES];
-        }
-        else{
-            UINavigationController *navi = (UINavigationController *)((UITabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController).selectedViewController;
-            [navi pushViewController:readerVc animated:YES];
-        }
+    else {
+        LNRecentBook *recent = [[LNRecentBook alloc] init];
+        recent.title = book.title;
+        recent._id = book._id;
+        recent.cover = book.cover;
+        recent.chapterIndex = 0;
+        recent.readRatio = 0;
+        recentBook = recent;
+    }
+    LNReaderViewController *readerVc = [[LNReaderViewController alloc] init];
+    readerVc.recentBook = recentBook;
+    if (self.mainVc.navigationController) {
+        [self.mainVc.navigationController pushViewController:readerVc animated:YES];
     }
     else{
-        //不存在
-        LNRecentBook *recentBook = [[LNRecentBook alloc] init];
-        recentBook.title = book.title;
-        recentBook._id = book._id;
-        recentBook.cover = book.cover;
-        recentBook.readRatio = 0;
-        LNReaderViewController *readerVc = [[LNReaderViewController alloc] init];
-        readerVc.recentBook = recentBook;
-        if (self.mainVc.navigationController) {
-            [self.mainVc.navigationController pushViewController:readerVc animated:YES];
-        }
-        else{
-            UINavigationController *navi = (UINavigationController *)((UITabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController).selectedViewController;
-            [navi pushViewController:readerVc animated:YES];
-        }
-        [self saveLastRecentBook:recentBook];
+        UINavigationController *navi = (UINavigationController *)((UITabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController).selectedViewController;
+        [navi pushViewController:readerVc animated:YES];
     }
 }
 @end

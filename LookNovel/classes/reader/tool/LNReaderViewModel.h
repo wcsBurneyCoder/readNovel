@@ -27,19 +27,11 @@
 @property (nonatomic, weak) LNReaderBottomControlView *bottomControlView;
 @property (nonatomic, weak) LNReaderSettingView *settingView;
 
+@property (nonatomic, strong) LNRecentBook *recentBook;
 /**当前的mode*/
 @property (nonatomic, assign) LNReaderMode currentMode;
 
 @property (nonatomic, assign) NSInteger pageSize;
-@property (nonatomic, assign) NSInteger chapterIndex;
-
-@property (nonatomic, strong) LNBookLinkSource *currentSource;
-@property (nonatomic, strong) LNBookChapter *currentChapter;
-
-@property (nonatomic, strong) NSArray<LNBookLinkSource *> *sourceList;
-/**当前源中是否含有vip章节*/
-@property (nonatomic, assign, readonly) BOOL hasVipChapter;
-@property (nonatomic, assign, readonly) NSInteger vipChapterIndex;
 
 @property (nonatomic, strong) UIFont *font;
 @property (nonatomic, assign) BOOL notLock;
@@ -48,20 +40,10 @@
 
 - (void)showIndicatorView;
 
-- (BOOL)isNewBook:(LNRecentBook *)recentBook;
-
 ///获取书籍内容
-- (void)loadBookContentWithBook:(LNRecentBook *)recentBook complete:(httpCompleteBlock)completeBlock;
-///根据书Id获取第一章的内容
-- (void)getBookFirstContentWithBookId:(NSString *)bookId complete:(httpCompleteBlock)completeBlock;
-///根据书Id获取所有的源列表
-- (void)getAllSourceWithBookId:(NSString *)bookId complete:(httpCompleteBlock)completeBlock;
+- (void)loadBookContentComplete:(httpCompleteBlock)completeBlock;
 ///获取当前源的章节列表 currentSource必须设置
 - (void)getAllChapterListComplete:(httpCompleteBlock)completeBlock;
-///获取当前章节的文章 currentChapter必须设置
-- (void)getBookContentpageIndex:(NSInteger)pageIndex complete:(httpCompleteBlock)completeBlock;
-///切换源
-- (void)changeSource:(LNBookLinkSource *)source complete:(httpCompleteBlock)complete;
 ///切换章节
 - (void)changeChapter:(NSInteger)index complete:(httpCompleteBlock)complete;
 ///切换夜间和日间模式

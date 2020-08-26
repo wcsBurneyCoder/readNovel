@@ -12,9 +12,9 @@
 
 @implementation LNSearchResultViewModel
 
-- (void)startSearchWithText:(NSString *)text complete:(httpCompleteBlock)completeBlock
+- (void)startSearchWithText:(NSString *)text page:(NSInteger)page pageSize:(NSInteger)pageSize complete:(httpCompleteBlock)completeBlock
 {
-    [LNAPI getSearchBooksWithKeyword:text complete:^(id result, BOOL cache, NSError *error) {
+    [LNAPI getSearchBooksWithKeyword:text page:page pageSize:pageSize complete:^(id result, BOOL cache, NSError *error) {
         if (error) {
             [MBProgressHUD showMessageHUD:error.domain];
             completeBlock(result,cache,error);

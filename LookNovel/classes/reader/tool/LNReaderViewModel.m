@@ -17,6 +17,8 @@
 @property (nonatomic, strong) UIColor *chapterColor;
 
 @property (nonatomic, strong) LNReaderSkin *pervSkin;
+
+@property (nonatomic, weak) LNBookChapter *lastCurrentChapter;
 @end
 
 @implementation LNReaderViewModel
@@ -30,8 +32,7 @@
         self.chapterFont = [UIFont systemFontOfSize:self.font.pointSize + 4];
         self.chapterColor = self.color;
         self.lineSpace = 15;
-        self.pageSize = 1;
-        self.chapterIndex = 0;
+        self.pageSize = 1.0;
         self.pervSkin = [LNSkinHelper sharedHelper].currentReaderSkin;
         self.currentMode = [self.pervSkin.Id isEqualToString:[LNSkinHelper sharedHelper].nightModeSkin.Id]?LNReaderModeNight:LNReaderModeDay;
         self.notLock = [[NSUserDefaults standardUserDefaults] boolForKey:LNReaderNotLockKey];
@@ -70,122 +71,24 @@
 
 - (BOOL)isNewBook:(LNRecentBook *)recentBook
 {
-    return (recentBook.source == nil || recentBook.chapter == nil);
+    return (recentBook.chapters == nil);
 }
 
-- (void)loadBookContentWithBook:(LNRecentBook *)recentBook complete:(httpCompleteBlock)completeBlock
+- (void)loadBookContentComplete:(httpCompleteBlock)completeBlock
 {
-    self.chapterIndex = 0;
-    if ([self isNewBook:recentBook]) {
-        //新书
-        [self getBookFirstContentWithBookId:recentBook._id complete:completeBlock];
+    if (![self isNewBook:self.recentBook]) {
+        [self getBookContentComplete:completeBlock];
     }
-    else{
-        self.currentSource = recentBook.source;
-        self.currentChapter = recentBook.chapter;
-        __block BOOL hasVip = NO;
-        __block NSInteger index = 0;
-        [self.currentSource.chapterList enumerateObjectsUsingBlock:^(LNBookChapter * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([obj.sort integerValue] == [self.currentChapter.sort integerValue]) {
-                self.chapterIndex = idx;
+    else {
+        [self getAllChapterListComplete:^(id result, BOOL cache, NSError *error) {
+            if (error == nil) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(11 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self getBookContentComplete:completeBlock];
+                });
             }
-            if (obj.isVip) {
-                hasVip = YES;
-                index = idx + 1;
-            }
-            if (self.chapterIndex > 0 && obj.isVip) {
-                *stop = YES;
-            }
-        }];
-        self ->_hasVipChapter = hasVip;
-        self ->_vipChapterIndex = index;
-        [self changeSource:recentBook.source complete:^(NSArray<LNBookContent *>* result, BOOL cache, NSError *error) {
-            if (self.currentChapter) {
-                if ([self.currentChapter.sort integerValue] == 0) {
-                    [self hideRefreshHeader];
-                }
-                else if(self.currentChapter.order == self.currentSource.chapterList.count){
-                    [self hideRefreshFooter];
-                }
-                else{
-                    [self showRefreshHeader];
-                    [self showRefreshFooter];
-                }
-            }
-            else{
-                [self hideRefreshHeader];
-                [self hideRefreshFooter];
-            }
-            completeBlock(result, cache, error);
-        }];
-    }
-}
-
-- (void)getBookFirstContentWithBookId:(NSString *)bookId complete:(httpCompleteBlock)completeBlock
-{
-    @weakify(self)
-    [self getAllSourceWithBookId:bookId complete:^(NSArray<LNBookLinkSource *>* sourceArr, BOOL cache, NSError *error) {
-        if (error) {
-            [MBProgressHUD showMessageHUD:error.domain];
-            if (completeBlock) {
-                completeBlock(nil, cache, error);
-            }
-        }
-        else{
-            @strongify(self)
-            self.currentSource = sourceArr.firstObject;
-            @weakify(self)
-            [self getAllChapterListComplete:^(NSArray<LNBookChapter *>* chapterArr, BOOL cache, NSError *error) {
-                if (error) {
-                    [MBProgressHUD showMessageHUD:error.domain];
-                    if (completeBlock) {
-                        completeBlock(nil, cache, error);
-                    }
-                }
-                else{
-                    @strongify(self)
-                    self.currentChapter = chapterArr.firstObject;
-                    [self updateRecentBook];
-                    [self getBookContentpageIndex:0  complete:^(NSArray<LNBookContent *> *contentArr, BOOL cache, NSError *error) {
-                        if (error) {
-                            if (completeBlock) {
-                                completeBlock(nil, cache, error);
-                            }
-                        }
-                        else{
-                            if (completeBlock) {
-                                completeBlock(contentArr, cache, nil);
-                            }
-                        }
-                    }];
-                }
-            }];
-        }
-    }];
-}
-
-- (void)getAllSourceWithBookId:(NSString *)bookId complete:(httpCompleteBlock)completeBlock
-{
-    if (self.sourceList) {
-        if (completeBlock) {
-            completeBlock(self.sourceList, YES, nil);
-        }
-    }
-    else{
-        @weakify(self)
-        [LNAPI getSourcesWithBookId:bookId complete:^(NSArray *result, BOOL cache, NSError *error) {
-            if (error) {
-                [MBProgressHUD showMessageHUD:error.domain];
+            else {
                 if (completeBlock) {
                     completeBlock(nil, cache, error);
-                }
-            }
-            else{
-                @strongify(self)
-                NSArray *modelArray = [NSArray modelArrayWithClass:[LNBookLinkSource class] json:result];
-                self.sourceList = modelArray;
-                if (completeBlock) {
-                    completeBlock(modelArray, cache, nil);
                 }
             }
         }];
@@ -194,223 +97,118 @@
 
 - (void)getAllChapterListComplete:(httpCompleteBlock)completeBlock
 {
-    if (self.currentSource.chapterList) {
+    if (self.recentBook.chapters) {
         if (completeBlock) {
-            completeBlock(self.currentSource.chapterList, YES, nil);
+            completeBlock(self.recentBook.chapters, YES, nil);
         }
+        return;
     }
-    else{
-        @weakify(self)
-        [LNAPI getBookChaptersWithsourceId:self.currentSource._id complete:^(id result, BOOL cache, NSError *error) {
-            if (error) {
-                [MBProgressHUD showMessageHUD:error.domain];
-                if (completeBlock) {
-                    completeBlock(nil, cache, error);
-                }
-            }
-            else{
-                @strongify(self)
-                NSArray *array = [result objectForKey:@"chapters"];
-                NSArray *modelArray = [NSArray modelArrayWithClass:[LNBookChapter class] json:array];
-                self.currentSource.chapterList = modelArray;
-                BOOL hasVip = NO;
-                NSInteger idx = 1;
-                for (LNBookChapter *chapter in modelArray) {
-                    if (chapter.isVip) {
-                        hasVip = YES;
-                        break;
-                    }
-                    idx ++;
-                }
-                self ->_hasVipChapter = hasVip;
-                self ->_vipChapterIndex = idx;
-                if (completeBlock) {
-                    completeBlock(modelArray, cache, nil);
-                }
-            }
-        }];
-    }
-}
-
-- (void)getBookContentpageIndex:(NSInteger)pageIndex complete:(httpCompleteBlock)completeBlock
-{
-    NSMutableArray *chapterArr = [NSMutableArray arrayWithCapacity:self.pageSize];
-    NSInteger max = MIN(self.pageSize, self.currentSource.chapterList.count - pageIndex);
-    BOOL allCache = YES;
-    for (NSInteger i = pageIndex; i < (pageIndex + max); i ++) {
-        LNBookChapter *chapter = self.currentSource.chapterList[i];
-        chapter.sort = @(i);
-        if (chapter.content) {
-            [chapterArr addObject:chapter];
-        }
-        else{
-            allCache = NO;
-            @weakify(self)
-            @weakify(chapter)
-            [LNAPI getBookContentWithChapter:chapter.link complete:^(id result, BOOL cache, NSError *error) {
-                if (error) {
-                    [MBProgressHUD showMessageHUD:error.domain];
-                    if (completeBlock) {
-                        completeBlock(nil, cache, error);
-                    }
-                }
-                else{
-                    @strongify(self)
-                    @strongify(chapter)
-                    NSDictionary *chapterDict = [result objectForKey:@"chapter"];
-                    LNBookContent *content = [LNBookContent modelWithDictionary:chapterDict];
-                    content.title = chapter.title;
-                    content.chapterOrder = [chapter.sort integerValue];
-                    chapter.content = content;
-                    [chapterArr addObject:chapter];
-                    if (chapterArr.count == self.pageSize) {
-                        [chapterArr sortUsingComparator:^NSComparisonResult(LNBookChapter *obj1, LNBookChapter *obj2) {
-                            return [obj1.sort integerValue] > [obj2.sort integerValue];
-                        }];
-                        NSMutableArray *contentArr = [NSMutableArray arrayWithCapacity:self.pageSize];
-                        for (LNBookChapter *cha in chapterArr) {
-                            [contentArr addObject:cha.content];
-                        }
-                        [self handleContent:contentArr complete:^(NSArray<LNBookContent *> *resultArr) {
-                            if (completeBlock) {
-                                completeBlock(contentArr, NO, nil);
-                            }
-                        }];
-                    }
-                }
-            }];
-        }
-    }
-    if (allCache) {
-        [chapterArr sortUsingComparator:^NSComparisonResult(LNBookChapter *obj1, LNBookChapter *obj2) {
-            return [obj1.sort integerValue] > [obj2.sort integerValue];
-        }];
-        NSMutableArray *contentArr = [NSMutableArray arrayWithCapacity:self.pageSize];
-        for (LNBookChapter *cha in chapterArr) {
-            [contentArr addObject:cha.content];
-        }
-        [self handleContent:contentArr complete:^(NSArray<LNBookContent *> *resultArr) {
-            if (completeBlock) {
-                completeBlock(contentArr, NO, nil);
-            }
-        }];
-    }
-}
-
-- (void)changeSource:(LNBookLinkSource *)source complete:(httpCompleteBlock)complete
-{
-    if (self.sourceList) {
-        //内部切换
-        if ([source._id isEqualToString:self.currentSource._id]) {
-            if (complete) {
-                complete(self.readerVc.dataArray, YES, nil);
-            }
-            return;
-        }
-    }
-    NSInteger currentChapterIndex = [self.currentSource.chapterList indexOfObject:self.currentChapter];
-    self.currentChapter = nil;
-    self.currentSource = source;
-    @weakify(self)
-    [self getAllChapterListComplete:^(NSArray<LNBookChapter *> *result, BOOL cache, NSError *error) {
+    [LNAPI getBookChaptersWithBookId:self.recentBook._id complete:^(id result, BOOL cache, NSError *error) {
         if (error) {
             [MBProgressHUD showMessageHUD:error.domain];
+            if (completeBlock) {
+                completeBlock(nil, cache, error);
+            }
         }
-        else{
-            @strongify(self)
-            NSInteger pageIndex = 0;
-            if (currentChapterIndex <= (result.count - 1)) {
-                self.currentChapter = [result objectAtIndex:currentChapterIndex];
-                pageIndex = currentChapterIndex;
-            }
-            else{
-                self.currentChapter = result.lastObject;
-                pageIndex = result.count - 1;
-            }
+        else {
+            NSArray *chapters = [NSArray modelArrayWithClass:[LNBookChapter class] json:result];
+            self.recentBook.chapters = chapters;
             [self updateRecentBook];
-            self.chapterIndex = pageIndex;
-            [self getBookContentpageIndex:pageIndex  complete:^(NSArray<LNBookContent *>*resultArr, BOOL cache, NSError *error) {
-                if (complete) {
-                    complete(resultArr, cache, error);
-                }
-            }];
+            if (completeBlock) {
+                completeBlock(chapters, cache, error);
+            }
+        }
+    }];
+}
+
+- (void)getBookContentComplete:(httpCompleteBlock)completeBlock
+{
+    LNBookChapter *chapter = [self.recentBook.chapters objectAtIndex:self.recentBook.chapterIndex];
+    self.lastCurrentChapter.isCurrent = NO;
+    chapter.isCurrent = YES;
+    self.lastCurrentChapter = chapter;
+    if (chapter.content) {
+        if (completeBlock) {
+            completeBlock(@[chapter.content], YES, nil);
+        }
+        return;
+    }
+    [LNAPI getBookContentWithChapter:chapter.Id bookId:self.recentBook._id complete:^(id result, BOOL cache, NSError *error) {
+        if (error) {
+            [MBProgressHUD showMessageHUD:error.domain];
+            if (completeBlock) {
+                completeBlock(nil, cache, error);
+            }
+        }
+        else {
+            LNBookContent *content = [LNBookContent modelWithJSON:result];
+            chapter.content = content;
+            [self handleContent:content];
+            if (completeBlock) {
+                completeBlock(@[content], cache, error);
+            }
         }
     }];
 }
 
 - (void)changeChapter:(NSInteger)index complete:(httpCompleteBlock)complete
 {
-    LNBookChapter *chapter = [self.currentSource.chapterList objectAtIndex:index];
-    if (chapter.isVip) {
+    if (index < 0 || index > self.recentBook.chapters.count - 1) {
         if (complete) {
-            complete(nil,NO,[NSError errorWithDomain:@"下一章节为付费章节，请切换小说源再试" code:-1 userInfo:nil]);
+            complete(nil, NO, nil);
         }
         return;
     }
-    self.currentChapter = chapter;
-    self.chapterIndex = index;
-    [self updateRecentBook];
-    [self getBookContentpageIndex:index complete :^(NSArray< LNBookContent *> *resultArr, BOOL cache, NSError *error) {
-        if (self.currentChapter) {
-            if (self.currentChapter.order == 1) {
-                [self hideRefreshHeader];
-            }
-            else if(self.currentChapter.order == self.currentSource.chapterList.count){
-                [self hideRefreshFooter];
-            }
-            else{
-                [self showRefreshHeader];
-                [self showRefreshFooter];
-            }
-        }
-        else{
+    NSInteger lastIndex = self.recentBook.chapterIndex;
+    self.recentBook.chapterIndex = index;
+    [self getBookContentComplete:^(id result, BOOL cache, NSError *error) {
+        if (index == 0) {
             [self hideRefreshHeader];
+        }
+        else if (index >= self.recentBook.chapters.count -1) {
             [self hideRefreshFooter];
         }
+        else {
+            [self showRefreshHeader];
+            [self showRefreshFooter];
+        }
+        if (error) {
+            self.recentBook.chapterIndex = lastIndex;
+        }
+        else {
+            [self updateRecentBook];
+        }
         if (complete) {
-            complete(resultArr, cache, nil);
+            complete(result, cache, error);
         }
     }];
 }
 
-- (void)handleContent:(NSArray<LNBookContent *> *)contentArr complete:(void(^)(NSArray< LNBookContent *> *resultArr))complete
+- (void)handleContent:(LNBookContent *)contentArr
 {
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        for (LNBookContent *content in contentArr) {
-            content.cellHeight = nil;
-            NSString *body = [content.body stringByReplacingRegex:@"\\n\\n" options:NSRegularExpressionCaseInsensitive withString:@"\n"];
-            body = [body stringByReplacingRegex:@"\\t" options:NSRegularExpressionCaseInsensitive withString:@""];
-            
-            NSAttributedString *chapterAttr = [[NSAttributedString alloc] initWithString:content.title attributes:@{NSFontAttributeName:self.chapterFont,NSForegroundColorAttributeName:self.chapterColor}];
-            content.titleAttribute = chapterAttr;
-            
-            NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-            style.lineSpacing = self.lineSpace;
-            style.firstLineHeadIndent = self.font.xHeight * 4;
-            NSDictionary *bodyAttribute =
-                                        @{NSFontAttributeName:self.font,
-                                        NSForegroundColorAttributeName:self.color,
-                                        NSParagraphStyleAttributeName:style};
-            NSAttributedString *bodyAttr = [[NSAttributedString alloc] initWithString:body attributes:bodyAttribute];
-            content.bodyAttribute = bodyAttr;
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (complete) {
-                complete(contentArr);
-            }
-        });
-    });
+    contentArr.cellHeight = nil;
+    NSString *body = [contentArr.content stringByReplacingRegex:@"/p&gt;" options:NSRegularExpressionCaseInsensitive withString:@""];
+    
+    NSAttributedString *chapterAttr = [[NSAttributedString alloc] initWithString:contentArr.name attributes:@{NSFontAttributeName:self.chapterFont,NSForegroundColorAttributeName:self.chapterColor}];
+    contentArr.titleAttribute = chapterAttr;
+    
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    style.lineSpacing = self.lineSpace;
+    style.firstLineHeadIndent = self.font.xHeight * 4;
+    NSDictionary *bodyAttribute =
+                                @{NSFontAttributeName:self.font,
+                                NSForegroundColorAttributeName:self.color,
+                                NSParagraphStyleAttributeName:style};
+    NSAttributedString *bodyAttr = [[NSAttributedString alloc] initWithString:body attributes:bodyAttribute];
+    contentArr.bodyAttribute = bodyAttr;
 }
 
 - (void)updateRecentBook
 {
-    LNRecentBook *recentBook = [self getLastRecentBook];
-    recentBook.chapter = self.currentChapter;
-    recentBook.source = self.currentSource;
-    NSInteger idx = [self.currentSource.chapterList indexOfObject:self.currentChapter];
-    recentBook.readRatio = ((idx + 1) / (float)self.currentSource.chapterList.count) * 100;
-    recentBook.lastReadTime = [[NSDate date] stringWithFormat:@"yyyy-MM-dd HH:mm"];
-    [self saveLastRecentBook:recentBook];
+    NSInteger idx = self.recentBook.chapterIndex;
+    self.recentBook.readRatio = ((idx + 1) / ((float)self.recentBook.chapters.count)) * 100;
+    self.recentBook.lastReadTime = [[NSDate date] stringWithFormat:@"yyyy-MM-dd HH:mm"];
+    [self saveLastRecentBook:self.recentBook];
     [[NSNotificationCenter defaultCenter] postNotificationName:LNUpdateRecentBookNotification object:nil];
 }
 
@@ -474,11 +272,11 @@
     self.chapterColor = self.color;
     
     if (self.readerVc.dataArray.count) {
-        [self handleContent:self.readerVc.dataArray complete:^(NSArray<LNBookContent *> *resultArr) {
-            self.readerVc.dataArray = [NSMutableArray arrayWithArray:resultArr];
+        for (LNBookContent *content in self.readerVc.dataArray) {
+            [self handleContent:content];
             [self.readerVc.tableView reloadData];
             self.settingView.userInteractionEnabled = YES;
-        }];
+        }
     }
 }
 

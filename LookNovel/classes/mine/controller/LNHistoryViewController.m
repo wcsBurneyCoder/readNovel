@@ -47,6 +47,12 @@
     
     self.tableView.rowHeight = 95;
     [self.historyVM loadHistoryData];
+    
+    @weakify(self)
+    [[NSNotificationCenter defaultCenter] addObserverForName:LNUpdateRecentBookNotification object:nil queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+        @strongify(self)
+        [self.historyVM loadHistoryData];
+    }];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -62,5 +68,18 @@
     LNRecentBook *book = [self.dataArray objectAtIndex:indexPath.row];
     [self.historyVM continueReadBook:book];
 }
+
+- (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [UISwipeActionsConfiguration configurationWithActions:@[[UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"删除" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
+        LNRecentBook *book = [self.dataArray objectAtIndex:indexPath.row];
+        [self.historyVM deleteRecentBook:book];
+        [self.dataArray removeObject:book];
+        [tableView deleteRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationTop];
+        [[NSNotificationCenter defaultCenter] postNotificationName:LNUpdateRecentBookNotification object:nil];
+        completionHandler(YES);
+    }]]];
+}
+
 
 @end

@@ -16,57 +16,25 @@
 - (void)getAllClassify
 {
     [MBProgressHUD showWaitingViewText:nil detailText:nil inView:nil];
-    [LNAPI getAllClassifyListComplete:^(NSDictionary *result, BOOL cache, NSError *error) {
-        NSMutableArray *dataArray = [NSMutableArray array];
+    [LNAPI getAllClassifyListComplete:^(NSArray *result, BOOL cache, NSError *error) {
+        NSArray *dataArray = @[];
         NSMutableArray *rightArray = [NSMutableArray array];
-        NSArray *maleArr = [result objectForKey:@"male"];
-        if (maleArr.count) {
-            LNClassifyGroupModel *group = [[LNClassifyGroupModel alloc] init];
-            group.name = [self nameForKey:@"male"];
-            group.key = @"male";
-            [rightArray addObject:[NSArray modelArrayWithClass:[LNClassifyModel class] json:maleArr]];
-            group.selected = NO;
-            [dataArray addObject:group];
-        }
-        NSArray *femaleArr = [result objectForKey:@"female"];
-        if (femaleArr.count) {
-            LNClassifyGroupModel *group = [[LNClassifyGroupModel alloc] init];
-            group.name = [self nameForKey:@"female"];
-            group.key = @"female";
-            [rightArray addObject:[NSArray modelArrayWithClass:[LNClassifyModel class] json:femaleArr]];
-            group.selected = NO;
-            [dataArray addObject:group];
-        }
-        NSArray *pressArr = [result objectForKey:@"press"];
-        if (pressArr.count) {
-            LNClassifyGroupModel *group = [[LNClassifyGroupModel alloc] init];
-            group.name = [self nameForKey:@"press"];
-            group.key = @"press";
-            [rightArray addObject:[NSArray modelArrayWithClass:[LNClassifyModel class] json:pressArr]];
-            group.selected = NO;
-            [dataArray addObject:group];
+        if (result) {
+            NSArray *groupArray = [NSArray modelArrayWithClass:[LNClassifyGroupModel class] json:result];
+            LNClassifyGroupModel *first = (LNClassifyGroupModel *)groupArray.firstObject;
+            first.selected = YES;
+            self.lastGroupModel = first;
+            dataArray = groupArray;
+            for (LNClassifyGroupModel *grop in groupArray) {
+                [rightArray addObject:grop.categories];
+            }
         }
         
-        LNClassifyGroupModel *first = (LNClassifyGroupModel *)dataArray.firstObject;
-        first.selected = YES;
-        self.lastGroupModel = first;
         self.leftDataArray = dataArray;
         self.rightDataArray = rightArray;
         [self reloadData];
         [MBProgressHUD dismissHUD];
     }];
-}
-
-- (NSString *)nameForKey:(NSString *)key
-{
-    if ([key isEqualToString:@"male"])
-        return @"男生";
-    else if ([key isEqualToString:@"female"])
-        return @"女生";
-    else if ([key isEqualToString:@"press"])
-        return @"出版物";
-    else
-        return @"";
 }
 
 - (void)changeGroupAtIndex:(NSInteger)index needScroll:(BOOL)need
@@ -94,10 +62,9 @@
 - (void)clickItemAtIndexPath:(NSIndexPath *)indexPath
 {
     LNClassifyModel *model = self.rightDataArray[indexPath.section][indexPath.row];
-    LNClassifyGroupModel *group = self.leftDataArray[indexPath.section];
     LNClassifyListViewController *listVc = [[LNClassifyListViewController alloc] init];
-    listVc.itemName = model.name;
-    listVc.groupKey = group.key;
+    listVc.categoryId = model.categoryId;
+    listVc.itemName = model.categoryName;
     [self.classifyVc.navigationController pushViewController:listVc animated:YES];
 }
 

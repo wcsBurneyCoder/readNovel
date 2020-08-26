@@ -53,6 +53,8 @@
 		EE5986CC2293CBEE008C7C61 /* LNSuggest.m in Sources */ = {isa = PBXBuildFile; fileRef = EE5986CB2293CBEE008C7C61 /* LNSuggest.m */; };
 		EE5986D02293CE8E008C7C61 /* LNSearchSuggestCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE5986CE2293CE8E008C7C61 /* LNSearchSuggestCell.m */; };
 		EE5986D12293CE8E008C7C61 /* LNSearchSuggestCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EE5986CF2293CE8E008C7C61 /* LNSearchSuggestCell.xib */; };
+		EE830E6D24EA230B0050A0E4 /* LNChapterListViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EE830E6C24EA230A0050A0E4 /* LNChapterListViewModel.m */; };
+		EE830E6E24EA26660050A0E4 /* LNChapterListViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EE830E6C24EA230A0050A0E4 /* LNChapterListViewModel.m */; };
 		EE8476122297B92600627581 /* LNReaderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB8456322856915002E0D00 /* LNReaderViewController.m */; };
 		EE8476132297B92D00627581 /* LNReaderScourceListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE251C34228BE45B00D3C145 /* LNReaderScourceListViewController.m */; };
 		EE8476142297B92F00627581 /* LNReaderChapterListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE251C37228BE48500D3C145 /* LNReaderChapterListViewController.m */; };
@@ -457,6 +459,8 @@
 		EE5986CD2293CE8E008C7C61 /* LNSearchSuggestCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNSearchSuggestCell.h; sourceTree = "<group>"; };
 		EE5986CE2293CE8E008C7C61 /* LNSearchSuggestCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LNSearchSuggestCell.m; sourceTree = "<group>"; };
 		EE5986CF2293CE8E008C7C61 /* LNSearchSuggestCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LNSearchSuggestCell.xib; sourceTree = "<group>"; };
+		EE830E6B24EA230A0050A0E4 /* LNChapterListViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNChapterListViewModel.h; sourceTree = "<group>"; };
+		EE830E6C24EA230A0050A0E4 /* LNChapterListViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LNChapterListViewModel.m; sourceTree = "<group>"; };
 		EE9B1DEA2293D95800E181FD /* LNSearchResultViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNSearchResultViewModel.h; sourceTree = "<group>"; };
 		EE9B1DEB2293D95800E181FD /* LNSearchResultViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LNSearchResultViewModel.m; sourceTree = "<group>"; };
 		EE9B1DED2293FE6900E181FD /* LNReaderBottomControlView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNReaderBottomControlView.h; sourceTree = "<group>"; };
@@ -1710,6 +1714,8 @@
 			children = (
 				EEB845562285549E002E0D00 /* LNReaderViewModel.h */,
 				EEB845572285549E002E0D00 /* LNReaderViewModel.m */,
+				EE830E6B24EA230A0050A0E4 /* LNChapterListViewModel.h */,
+				EE830E6C24EA230A0050A0E4 /* LNChapterListViewModel.m */,
 			);
 			path = tool;
 			sourceTree = "<group>";
@@ -2190,6 +2196,7 @@
 				EEC8EC3C228EB6D700E482E3 /* TOCropToolbar.m in Sources */,
 				EEB8449D2282CF63002E0D00 /* YYTextRubyAnnotation.m in Sources */,
 				EEB844922282CF63002E0D00 /* YYTextKeyboardManager.m in Sources */,
+				EE830E6D24EA230B0050A0E4 /* LNChapterListViewModel.m in Sources */,
 				EEB844C12282CF63002E0D00 /* YYDispatchQueuePool.m in Sources */,
 				EEB844A62282CF63002E0D00 /* UIView+YYAdd.m in Sources */,
 				EEC8EC2D228EB6D700E482E3 /* TZProgressView.m in Sources */,
@@ -2376,6 +2383,7 @@
 				EEB8193D2297A30E00FDD005 /* YYTextLayout.m in Sources */,
 				EEB819642297A35300FDD005 /* NSNotificationCenter+YYAdd.m in Sources */,
 				EEB819532297A33B00FDD005 /* UIView+YYAdd.m in Sources */,
+				EE830E6E24EA26660050A0E4 /* LNChapterListViewModel.m in Sources */,
 				EEB819622297A35300FDD005 /* NSDate+YYAdd.m in Sources */,
 				EE84761E2297B96300627581 /* LNReaderViewModel.m in Sources */,
 				EE8476192297B95E00627581 /* LNReaderChapterListCell.m in Sources */,
@@ -2557,7 +2565,7 @@
 				DEVELOPMENT_TEAM = RJSUQXZ7UW;
 				GCC_PREFIX_HEADER = LookNovel/lookNovel.pch;
 				INFOPLIST_FILE = LookNovel/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2581,7 +2589,7 @@
 				DEVELOPMENT_TEAM = RJSUQXZ7UW;
 				GCC_PREFIX_HEADER = LookNovel/lookNovel.pch;
 				INFOPLIST_FILE = LookNovel/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface LNBook : NSObject
+@interface LNBook : NSObject <YYModel, NSCoding>
 ///主键
 @property (nonatomic, copy) NSString *_id;
 ///封面图片

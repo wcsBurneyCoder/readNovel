@@ -9,17 +9,20 @@
 #import "LNBookContent.h"
 
 @implementation LNBookContent
-MJCodingImplementation
 
-- (NSDictionary *)modelCustomWillTransformFromDictionary:(NSDictionary *)dic
++ (NSDictionary<NSString *,id> *)modelCustomPropertyMapper
 {
-    id content = [dic objectForKey:@"cpContent"];
-    if (content) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:dic];
-        [dict setValue:content forKey:@"body"];
-        return [dict copy];
-    }
-    return dic;
+    return @{@"chapterId": @"id"};
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    return [self modelInitWithCoder:coder];
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    [self modelEncodeWithCoder:coder];
 }
 
 @end

@@ -11,8 +11,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface LNClassifyListViewController : LNTableViewController
-/**组key*/
-@property (nonatomic, copy) NSString *groupKey;
+/**id*/
+@property (nonatomic, copy) NSString *categoryId;
 /**分类名*/
 @property (nonatomic, copy) NSString *itemName;
 @end

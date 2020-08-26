@@ -184,6 +184,10 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (scrollView == self.classifyVM.rightCollectionView && _autoScroll == NO) {
+        if (self.classifyVM.rightCollectionView.contentOffset.y <= 0) {
+            [self.classifyVM changeGroupAtIndex:0 needScroll:NO];
+            return;
+        }
         CGFloat xOffset = scrollView.width * 0.4;
         CGFloat yOffset = ABS(self.classifyVM.rightCollectionView.contentOffset.y) + kScreenHeight * 0.5;
         CGPoint orignP = CGPointMake(xOffset, yOffset);

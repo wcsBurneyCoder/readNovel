@@ -12,10 +12,10 @@
 #import "LNBookLinkSource.h"
 
 @interface LNRecentBook : LNBook
-///章节标题
-@property (nonatomic, strong) LNBookChapter *chapter;
-///章节标题
-@property (nonatomic, strong) LNBookLinkSource *source;
+///当前章节
+@property (nonatomic, assign) NSInteger chapterIndex;
+///章节列表
+@property (nonatomic, strong) NSArray<LNBookChapter *> *chapters;
 ///已读比例
 @property (nonatomic, assign) float readRatio;
 ///最后阅读时间

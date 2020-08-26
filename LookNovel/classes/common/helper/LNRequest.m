@@ -13,7 +13,8 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.requestSerializer = [AFHTTPRequestSerializer serializer];
+        self.baseURI = @"http://yuenov.com:15555/app/open/api/";
+        self.requestSerializer = [AFJSONRequestSerializer serializer];
         self.requestSerializer.timeoutInterval = 8;
         self.responseSerializer = [AFJSONResponseSerializer serializer];
         NSMutableSet *contentTypes = [[NSMutableSet alloc] initWithSet:self.responseSerializer.acceptableContentTypes];
@@ -54,8 +55,15 @@
         }
     }):NULL;
     [request startWithCache:cacheBlock success:^(YBNetworkResponse * _Nonnull response) {
-        if (completeBlock) {
-            completeBlock(response.responseObject, NO, nil);
+        if (response.error) {
+            if (completeBlock) {
+                completeBlock(nil, NO, response.error);
+            }
+        }
+        else {
+            if (completeBlock) {
+                completeBlock(response.responseObject, NO, nil);
+            }
         }
     } failure:^(YBNetworkResponse * _Nonnull response) {
         if (completeBlock) {
@@ -67,7 +75,16 @@
 /** 预处理请求成功数据 */
 - (void)yb_preprocessSuccessInMainThreadWithResponse:(YBNetworkResponse *)response
 {
-    
+    NSDictionary *result = [response.responseObject objectForKey:@"result"];
+    if (result) {
+        if ([[result objectForKey:@"code"] integerValue] != 0) {
+            NSLog(@"请求返回失败结果 -- %@",result);
+            response.responseObject = nil;
+            response.errorType = YBResponseErrorTypeNone;
+            
+            response.error = [NSError errorWithDomain:[result objectForKey:@"msg"] code:[[result objectForKey:@"code"] integerValue] userInfo:nil];
+        }
+    }
 }
 
 /** 预处理请求失败数据 */

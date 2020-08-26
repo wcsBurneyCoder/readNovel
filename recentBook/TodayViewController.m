@@ -78,7 +78,8 @@
         [self.coverImageView setImageWithURL:[NSURL URLWithString:recentBook.cover] placeholder:defaultCoverImage() options:defaultImageOptions() completion:nil];
         
         self.nameLabel.text = recentBook.title;
-        self.chapterLabel.text = recentBook.chapter.title;
+        LNBookChapter *chapter = [recentBook.chapters objectAtIndex:recentBook.chapterIndex];
+        self.chapterLabel.text = chapter.name;
         self.ratioLabel.text = [NSString stringWithFormat:@"读至%.1f%%",recentBook.readRatio];
     }
 }

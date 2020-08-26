@@ -12,6 +12,12 @@
 
 @end
 
-@implementation LNBookDetailRating
+@implementation LNRecommend
 
 @end
+
+@implementation LNUpdate
+
+@end
+
+

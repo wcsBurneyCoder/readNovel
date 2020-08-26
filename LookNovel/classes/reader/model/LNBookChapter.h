@@ -11,17 +11,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface LNBookChapter : NSObject
-@property (nonatomic, copy) NSString *title;
-@property (nonatomic, copy) NSString *chapterCover;
-@property (nonatomic, assign) NSInteger totalpage;
-@property (nonatomic, assign) NSInteger partsize;
-@property (nonatomic, copy) NSString *link;
-@property (nonatomic, assign) NSInteger currency;
-@property (nonatomic, assign) NSInteger time;
-@property (nonatomic, assign) NSInteger order;
-@property (nonatomic, assign) BOOL unreadble;
-@property (nonatomic, assign) BOOL isVip;
+@interface LNBookChapter : NSObject <YYModel, NSCoding>
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *Id;
 /**章节的内容*/
 @property (nonatomic, strong) LNBookContent *content;
 /**序号*/

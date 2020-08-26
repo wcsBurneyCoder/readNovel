@@ -34,7 +34,8 @@
     
     self.nameLabel.text = book.title;
     
-    self.chapterLabel.text = [NSString stringWithFormat:@"阅读到:%@",book.chapter.title];
+    LNBookChapter *chapter = book.chapters[book.chapterIndex];
+    self.chapterLabel.text = [NSString stringWithFormat:@"阅读到:%@",chapter.name];
     
     NSDate *date = [NSDate dateWithString:book.lastReadTime format:@"yyyy-MM-dd HH:mm"];
     NSString *dateStr = book.lastReadTime;

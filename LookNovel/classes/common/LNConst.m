@@ -59,3 +59,10 @@ YYWebImageOptions defaultImageOptions(void)
     return (YYWebImageOptionProgressiveBlur | YYWebImageOptionSetImageWithFadeAnimation);
 }
 
+NSString * coverImgUrl(NSString *path)
+{
+    if (![path hasPrefix:@"http"]) {
+        return [NSString stringWithFormat:@"http://yuenov.com:15555%@", path];
+    }
+    return path;
+}

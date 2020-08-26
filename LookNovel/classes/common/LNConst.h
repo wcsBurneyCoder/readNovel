@@ -32,3 +32,5 @@ NSString * cacheFilePathWithCompentPath(NSString *path);
 UIImage * defaultCoverImage(void);
 YYWebImageOptions defaultImageOptions(void);
 
+NSString * coverImgUrl(NSString *path);
+

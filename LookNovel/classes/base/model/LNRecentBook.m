@@ -9,5 +9,4 @@
 #import "LNRecentBook.h"
 
 @implementation LNRecentBook
-MJCodingImplementation
 @end

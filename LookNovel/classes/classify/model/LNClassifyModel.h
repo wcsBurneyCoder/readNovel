@@ -11,25 +11,22 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface LNClassifyModel : NSObject
+/**ID*/
+@property (nonatomic, copy) NSString *categoryId;
 /**名称*/
-@property (nonatomic, copy) NSString *name;
-/**书籍数量*/
-@property (nonatomic, assign) NSInteger bookCount;
-/**月票数量*/
-@property (nonatomic, assign) NSInteger monthlyCount;
-/**图标*/
-@property (nonatomic, copy) NSString *icon;
+@property (nonatomic, copy) NSString *categoryName;
 /**书籍cover*/
-@property (nonatomic, strong) NSArray<NSString *> *bookCover;
+@property (nonatomic, strong) NSArray<NSString *> *coverImgs;
 @end
 
-@interface LNClassifyGroupModel : NSObject
+@interface LNClassifyGroupModel : NSObject <YYModel>
 /**名称*/
-@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *channelName;
 /**名称key*/
-@property (nonatomic, copy) NSString *key;
+@property (nonatomic, copy) NSString *channelId;
 /**是否选中*/
 @property (nonatomic, assign) BOOL selected;
+@property (nonatomic, strong) NSArray<LNClassifyModel *> *categories;
 @end
 
 NS_ASSUME_NONNULL_END

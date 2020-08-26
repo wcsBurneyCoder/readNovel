@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign, readonly) NSInteger pageSize;
 
-- (void)getBooksWithGroupName:(NSString *)group itemName:(NSString *)item page:(NSInteger)page complete:(httpCompleteBlock)completeBlock;
+- (void)getBooksWithGroupId:(NSString *)groupId page:(NSInteger)page complete:(nonnull httpCompleteBlock)completeBlock;
 
 - (void)enterBookDetailAtIndex:(NSInteger)index;
 @end
